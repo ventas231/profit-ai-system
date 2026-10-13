@@ -5,7 +5,7 @@
  * Columnas que lee (fila 1, sin importar mayúsculas ni acentos):
  *   CORREO | DÍA Y HORA | DESCARGO LA SKILL | CHECK OUT
  * Columnas opcionales: si las agregas en la fila 1, también se llenan solas:
- *   VIO NIVELES | WHATSAPP | VIO VIDEO | PAGÓ | ORIGEN
+ *   VIO NIVELES | WHATSAPP | VIO VIDEO | PAGÓ | AGENDÓ CITA | ORIGEN
  */
 const TOKEN = 'pais-12d1daaf47289fbf';          // la misma clave que HOJA_TOKEN en config.js
 const ZONA = 'America/Mexico_City';
@@ -19,6 +19,7 @@ const COLUMNAS = {
   whatsapp: 'WHATSAPP',
   vio_video: 'VIO VIDEO',
   pago: 'PAGO',
+  agendo_cita: 'AGENDO CITA',
 };
 
 function doPost(e) {

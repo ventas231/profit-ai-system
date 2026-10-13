@@ -176,3 +176,8 @@ nav .btn-glow{min-height:42px}
 .wa-btn:hover{background:#3ee07b;color:#06301a}
 .wa-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (prefers-reduced-motion:reduce){.btn-glow,.btn-glow::after{animation:none}}
+
+/* Qué incluye, dentro de cada nivel */
+.incluye{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:10px}
+.incluye .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+.incluye ul{font-size:14px}

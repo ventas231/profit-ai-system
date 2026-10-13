@@ -15,6 +15,9 @@ window.CONFIG = {
   WHATSAPP_URL: "https://wa.me/522223288421",
   CORREO: "cursos@summaproducts.com",
 
+  // ---- Agendar cita (Calendly) ----
+  CITA_URL: "",
+
   // ---- Precios ----
   // Se muestran en dólares. Equivalencia de los precios de trabajo en MXN
   // con el FIX Banxico del 9/oct/2026 (18.4163). Precio final en USD pendiente de Gerardo.
