@@ -38,6 +38,9 @@ const ACCESO = {
 };
 const NIVEL1 = { monto: '497.00', moneda: 'USD' };
 const REMITENTE = 'Profit AI System';
+// El correo sale de la cuenta que instala este script (Ejecutar como: Yo).
+// Instálalo con cursos@summaproducts.com para que salga de ahí y quede en sus Enviados.
+const RESPONDER_A = 'cursos@summaproducts.com';
 // Llaves de PayPal: NO van aquí (este archivo es público en GitHub).
 // Apps Script › Configuración del proyecto › Propiedades del script:
 //   PAYPAL_CLIENT_ID, PAYPAL_SECRET y PAYPAL_MODO ("live" o "sandbox").
@@ -76,7 +79,11 @@ function doPost(e) {
     }
     if (d.accion === 'evento' && d.evento === 'pago' && d.pedido) {
       const envio = enviarAcceso(email, String(d.pedido));
-      if (envio === 'enviado' && col('ACCESO ENVIADO')) hoja.getRange(fila, col('ACCESO ENVIADO')).setValue('✔').setNote(ahora + ' · ' + d.pedido);
+      if (envio === 'enviado') {
+        const nota = 'Acceso enviado ' + ahora + ' · pedido ' + d.pedido;
+        if (col('ACCESO ENVIADO')) hoja.getRange(fila, col('ACCESO ENVIADO')).setValue('✔').setNote(nota);
+        else if (col('PAGO')) hoja.getRange(fila, col('PAGO')).setValue('✔').setNote(nota);   // sin esa columna, queda en la nota de PAGO
+      }
       return salida({ ok: true, fila: fila, acceso: envio });
     }
     return salida({ ok: true, fila: fila });
@@ -114,7 +121,7 @@ function enviarAcceso(email, pedido) {
     .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
-  MailApp.sendEmail({ to: para, name: REMITENTE, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
+  MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
     body: 'Tu acceso a Profit AI System. Descarga tus agentes: ' + ACCESO.LINK_AGENTES + ' · Guía: ' + ACCESO.LINK_GUIA + ' · Agenda tu sesión: ' + ACCESO.LINK_CITA });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';

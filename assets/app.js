@@ -48,6 +48,10 @@
   }
   window.ProfitAI = { palomita: palomita, correo: correo };
 
+  // ---- Pago: muestra a qué correo le llega su acceso ----
+  var destino = document.getElementById("correo-destino");
+  if (destino && correo()) destino.textContent = "a " + correo() + ", el correo que pusiste al registrarte";
+
   // ---- Eventos de cada página ----
   if (pagina === "sistema") {
     var niveles = document.getElementById("niveles");
