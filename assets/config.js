@@ -25,7 +25,7 @@ window.CONFIG = {
 
   // ---- Hoja de Google donde se registran los correos y las palomitas ----
   // URL de la "aplicación web" de Apps Script instalada en la hoja (ver README).
-  HOJA_URL: "",
+  HOJA_URL: "https://script.google.com/macros/s/AKfycbxiocHNPH0z3zHyZ8ZdFhbAc9w9jLOph80ALhabmVBC8XCBgLCW0uOo-K74aFIKok9Y/exec",
   HOJA_TOKEN: "pais-12d1daaf47289fbf",   // la misma clave que pusiste en el Apps Script
 
   // ---- Pago con PayPal (página pago.html) ----

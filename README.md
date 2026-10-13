@@ -54,7 +54,7 @@ El formulario solo deja pasar a la página de acceso cuando la hoja confirma que
 - [x] Link de Calendly → `CITA_URL` en `config.js` (botón de la página 3). El correo de bienvenida agenda por WhatsApp.
 - [ ] Videos 1 y 2 → `VIDEO_DIAGNOSTICO_URL` y `VIDEO_PRIORIDADES_URL`.
 - [ ] PayPal: Client ID en `config.js`; Client ID y Secret en Propiedades del script de la hoja.
-- [ ] Instalar el registro en la hoja con la cuenta cursos@summaproducts.com (de ahí sale el correo de bienvenida) y correr `prueba` y `pruebaCorreo`.
+- [x] Registro instalado en la hoja con cursos@ (prueba y pruebaCorreo OK, 13/10/2026). Falta llenar LINK_AGENTES y LINK_GUIA y actualizar la implementación existente (misma URL).
 - [ ] Prueba completa con un correo de prueba: registro, descarga, niveles, checkout, pago y correo de bienvenida.
 - [ ] Poner `MODO_PRUEBA: false`.
 - [ ] Aviso de privacidad revisado por Legal.
