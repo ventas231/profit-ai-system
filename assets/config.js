@@ -15,13 +15,13 @@ window.CONFIG = {
   WHATSAPP_URL: "https://wa.me/522223288421",
   CORREO: "cursos@summaproducts.com",
 
+  // ---- Agendar cita (Calendly) ----
+  CITA_URL: "https://calendly.com/cursos-summaproducts/profit-ai-system",
+
   // ---- Precios ----
-  // Se muestran en dólares. Equivalencia de los precios de trabajo en MXN
-  // con el FIX Banxico del 9/oct/2026 (18.4163). Precio final en USD pendiente de Gerardo.
-  PRECIO_N1: "US$489",
+  // Todo en dólares (USD).
+  PRECIO_N1: "US$497",
   PRECIO_N2: "US$2,444",
-  PRECIO_N1_MXN: "$9,000 MXN",
-  PRECIO_N2_MXN: "$45,000 MXN",
 
   // ---- Hoja de Google donde se registran los correos y las palomitas ----
   // URL de la "aplicación web" de Apps Script instalada en la hoja (ver README).
@@ -32,9 +32,9 @@ window.CONFIG = {
   // Cuenta PayPal de Estados Unidos: se cobra en dólares.
   // Opción recomendada: botón alojado de PayPal Business (el precio vive en PayPal).
   PAYPAL_CLIENT_ID: "",            // Client ID (sandbox para pruebas, live para cobrar)
-  PAYPAL_HOSTED_BUTTON_ID: "",     // ID del botón alojado del Nivel 1
+  PAYPAL_HOSTED_BUTTON_ID: "",     // Dejar vacío: el correo automático de bienvenida necesita el botón normal (con número de pedido)
   PAYPAL_MODO: "sandbox",          // "sandbox" o "live" (live solo con precio aprobado)
-  N1_MONTO: "489.00",              // usado solo si no hay botón alojado
+  N1_MONTO: "497.00",              // usado solo si no hay botón alojado
   MONEDA: "USD",
 
   // ---- Videos: enlace para insertar (YouTube no listado o Vimeo) ----
@@ -42,7 +42,7 @@ window.CONFIG = {
   VIDEO_PRIORIDADES_URL: "",   // Video 2 · De tus prioridades a los cambios
 
   // ---- Descargas del diagnóstico ----
-  // Los archivos van en la carpeta descargas/ del sitio, por ejemplo "descargas/skill-diagnostico.zip".
-  DESCARGA_SKILL_URL: "",
-  GUIA_REPORTES_URL: ""
+  // Un solo .zip con la skill del diagnóstico y la guía de reportes en PDF.
+  // Va en la carpeta descargas/ del sitio, por ejemplo "descargas/kit-diagnostico.zip".
+  DESCARGA_SKILL_URL: ""
 };

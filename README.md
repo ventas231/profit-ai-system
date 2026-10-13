@@ -49,9 +49,13 @@ Si cambias el código del Apps Script, haz **Implementar › Administrar impleme
 El formulario solo deja pasar a la página de acceso cuando la hoja confirma que guardó el correo. Si la hoja no responde, lo reintenta. Si vuelve a fallar, la persona ve un error y el correo de contacto. En `MODO_PRUEBA: true` deja pasar de todos modos y lo avisa en la consola.
 
 ## Antes de salir en vivo
-- Poner `MODO_PRUEBA: false`. Así, si la hoja falla, la persona ve un error y no se pierde el correo en silencio.
-- Hacer una prueba completa con un correo de prueba, etapa por etapa, con captura y fecha.
-- Pendientes de Gerardo:
-  - Client ID de PayPal (cuenta de EE. UU., cobra en USD);
-  - garantía de implementación;
-- Aviso de privacidad revisado por Legal.
+- [ ] Skill gratis del diagnóstico (nombre exacto con Gerardo) + guía de reportes en PDF → un solo .zip en `descargas/` y `DESCARGA_SKILL_URL`.
+- [ ] Los 5 agentes y la guía de instalación → `LINK_AGENTES` y `LINK_GUIA` en `Registro.gs`.
+- [x] Link de Calendly → `CITA_URL` en `config.js` (botón de la página 3). El correo de bienvenida agenda por WhatsApp.
+- [ ] Videos 1 y 2 → `VIDEO_DIAGNOSTICO_URL` y `VIDEO_PRIORIDADES_URL`.
+- [ ] PayPal: Client ID en `config.js`; Client ID y Secret en Propiedades del script de la hoja.
+- [ ] Instalar el registro en la hoja con la cuenta cursos@summaproducts.com (de ahí sale el correo de bienvenida) y correr `prueba` y `pruebaCorreo`.
+- [ ] Prueba completa con un correo de prueba: registro, descarga, niveles, checkout, pago y correo de bienvenida.
+- [ ] Poner `MODO_PRUEBA: false`.
+- [ ] Aviso de privacidad revisado por Legal.
+- [ ] Mover la página de vender en Amazon a otra dirección y conectar gerardovilla.mx.

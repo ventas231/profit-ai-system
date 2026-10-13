@@ -176,3 +176,16 @@ nav .btn-glow{min-height:42px}
 .wa-btn:hover{background:#3ee07b;color:#06301a}
 .wa-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 @media (prefers-reduced-motion:reduce){.btn-glow,.btn-glow::after{animation:none}}
+
+/* Qué incluye, dentro de cada nivel */
+.incluye{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:10px}
+.incluye .k{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+.incluye ul{font-size:14px}
+
+/* Botones de compra y cotización de los niveles: en cápsula */
+.btn.cap{border-radius:999px;width:100%;min-height:58px;font-size:17px;letter-spacing:.01em;outline:2px solid rgba(255,255,255,.18);outline-offset:4px}
+.wa-btn.cap{box-shadow:0 8px 24px rgba(37,211,102,.3)}
+
+/* Pago: aviso de a qué correo llega el acceso */
+.aviso-correo{font-size:14px;line-height:1.55;color:var(--muted);background:rgba(255,153,0,.08);border:1px solid rgba(255,153,0,.35);border-radius:12px;padding:12px 14px}
+.aviso-correo b{color:var(--fg)}
