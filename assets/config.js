@@ -16,7 +16,7 @@ window.CONFIG = {
   CORREO: "cursos@summaproducts.com",
 
   // ---- Agendar cita (Calendly) ----
-  CITA_URL: "",
+  CITA_URL: "https://calendly.com/cursos-summaproducts/profit-ai-system",
 
   // ---- Precios ----
   // Todo en dólares (USD).
@@ -42,7 +42,7 @@ window.CONFIG = {
   VIDEO_PRIORIDADES_URL: "",   // Video 2 · De tus prioridades a los cambios
 
   // ---- Descargas del diagnóstico ----
-  // Los archivos van en la carpeta descargas/ del sitio, por ejemplo "descargas/skill-diagnostico.zip".
-  DESCARGA_SKILL_URL: "",
-  GUIA_REPORTES_URL: ""
+  // Un solo .zip con la skill del diagnóstico y la guía de reportes en PDF.
+  // Va en la carpeta descargas/ del sitio, por ejemplo "descargas/kit-diagnostico.zip".
+  DESCARGA_SKILL_URL: ""
 };

@@ -49,10 +49,9 @@ Si cambias el código del Apps Script, haz **Implementar › Administrar impleme
 El formulario solo deja pasar a la página de acceso cuando la hoja confirma que guardó el correo. Si la hoja no responde, lo reintenta. Si vuelve a fallar, la persona ve un error y el correo de contacto. En `MODO_PRUEBA: true` deja pasar de todos modos y lo avisa en la consola.
 
 ## Antes de salir en vivo
-- [ ] Archivo de la skill gratis del diagnóstico (nombre exacto con Gerardo) → `descargas/` y `DESCARGA_SKILL_URL`.
-- [ ] Guía de reportes en PDF (por decidir si se hace) → `GUIA_REPORTES_URL`.
+- [ ] Skill gratis del diagnóstico (nombre exacto con Gerardo) + guía de reportes en PDF → un solo .zip en `descargas/` y `DESCARGA_SKILL_URL`.
 - [ ] Los 5 agentes y la guía de instalación → `LINK_AGENTES` y `LINK_GUIA` en `Registro.gs`.
-- [ ] Link de Calendly (con pregunta de WhatsApp para confirmar la cita) → `CITA_URL` en `config.js` y `LINK_CITA` en `Registro.gs`.
+- [x] Link de Calendly → `CITA_URL` en `config.js` y `LINK_CITA` en `Registro.gs`.
 - [ ] Videos 1 y 2 → `VIDEO_DIAGNOSTICO_URL` y `VIDEO_PRIORIDADES_URL`.
 - [ ] PayPal: Client ID en `config.js`; Client ID y Secret en Propiedades del script de la hoja.
 - [ ] Instalar el registro en la hoja con la cuenta cursos@summaproducts.com (de ahí sale el correo de bienvenida) y correr `prueba` y `pruebaCorreo`.

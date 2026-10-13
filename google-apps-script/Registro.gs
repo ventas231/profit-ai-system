@@ -33,7 +33,7 @@ const COLUMNAS = {
 const ACCESO = {
   LINK_AGENTES: '',   // descarga de los 5 agentes
   LINK_GUIA: '',      // guía de instalación
-  LINK_CITA: '',      // Calendly de la sesión 1 a 1
+  LINK_CITA: 'https://calendly.com/cursos-summaproducts/profit-ai-system',
   WHATSAPP: 'https://wa.me/522223288421',
 };
 const NIVEL1 = { monto: '497.00', moneda: 'USD' };
