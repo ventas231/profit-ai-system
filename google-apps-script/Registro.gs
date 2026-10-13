@@ -33,8 +33,7 @@ const COLUMNAS = {
 const ACCESO = {
   LINK_AGENTES: '',   // descarga de los 5 agentes
   LINK_GUIA: '',      // guía de instalación
-  LINK_CITA: 'https://calendly.com/cursos-summaproducts/profit-ai-system',
-  WHATSAPP: 'https://wa.me/522223288421',
+  WHATSAPP: 'https://wa.me/522223288421',   // la sesión 1 a 1 se agenda por aquí
 };
 const NIVEL1 = { monto: '497.00', moneda: 'USD' };
 const REMITENTE = 'Profit AI System';
@@ -101,7 +100,7 @@ function enviarAcceso(email, pedido) {
   const clave = 'acceso_' + pedido;
   if (props.getProperty(clave)) return 'ya_enviado';
   if (!props.getProperty('PAYPAL_CLIENT_ID') || !props.getProperty('PAYPAL_SECRET')) return 'sin_llaves';
-  if (!ACCESO.LINK_AGENTES || !ACCESO.LINK_GUIA || !ACCESO.LINK_CITA) return 'sin_enlaces';
+  if (!ACCESO.LINK_AGENTES || !ACCESO.LINK_GUIA) return 'sin_enlaces';
 
   const orden = ordenPayPal(pedido, props);
   if (!orden) return 'error_paypal';
@@ -112,19 +111,24 @@ function enviarAcceso(email, pedido) {
     && monto.value === NIVEL1.monto && monto.currency_code === NIVEL1.moneda;
   if (!cobrado) return 'no_cobrado';
 
-  const html = HtmlService.createHtmlOutputFromFile('Correo').getContent()
-    .replace(/{{CORREO}}/g, email)
-    .replace(/{{PEDIDO}}/g, pedido)
-    .replace(/{{LINK_AGENTES}}/g, ACCESO.LINK_AGENTES)
-    .replace(/{{LINK_GUIA}}/g, ACCESO.LINK_GUIA)
-    .replace(/{{LINK_CITA}}/g, ACCESO.LINK_CITA)
-    .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
+  const html = armarCorreo(email, pedido);
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
   MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. Descarga tus agentes: ' + ACCESO.LINK_AGENTES + ' · Guía: ' + ACCESO.LINK_GUIA + ' · Agenda tu sesión: ' + ACCESO.LINK_CITA });
+    body: 'Tu acceso a Profit AI System. Descarga tus agentes: ' + ACCESO.LINK_AGENTES + ' · Guía: ' + ACCESO.LINK_GUIA + ' · Agenda tu sesión por WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
+}
+
+function armarCorreo(email, pedido) {
+  const cita = ACCESO.WHATSAPP + '?text=' + encodeURIComponent('Hola, compré Profit AI System Nivel 1 (pedido ' + pedido + ') y quiero agendar mi sesión 1 a 1.');
+  return HtmlService.createHtmlOutputFromFile('Correo').getContent()
+    .replace(/{{CORREO}}/g, email)
+    .replace(/{{PEDIDO}}/g, pedido)
+    .replace(/{{LINK_AGENTES}}/g, ACCESO.LINK_AGENTES || '#')
+    .replace(/{{LINK_GUIA}}/g, ACCESO.LINK_GUIA || '#')
+    .replace(/{{WHATSAPP_CITA}}/g, cita)
+    .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
 }
 
 function ordenPayPal(pedido, props) {
@@ -142,10 +146,7 @@ function ordenPayPal(pedido, props) {
 /** Prueba del correo: en el editor elige "pruebaCorreo" y dale Ejecutar. Te llega a ti, sin pasar por PayPal. */
 function pruebaCorreo() {
   const yo = Session.getActiveUser().getEmail();
-  const html = HtmlService.createHtmlOutputFromFile('Correo').getContent()
-    .replace(/{{CORREO}}/g, yo).replace(/{{PEDIDO}}/g, 'PRUEBA-0000')
-    .replace(/{{LINK_AGENTES}}/g, ACCESO.LINK_AGENTES || '#').replace(/{{LINK_GUIA}}/g, ACCESO.LINK_GUIA || '#')
-    .replace(/{{LINK_CITA}}/g, ACCESO.LINK_CITA || '#').replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
+  const html = armarCorreo(yo, 'PRUEBA-0000');
   MailApp.sendEmail({ to: yo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a Profit AI System · Nivel 1', htmlBody: html });
   Logger.log('Correo de prueba enviado a ' + yo);
 }

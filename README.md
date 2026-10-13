@@ -51,7 +51,7 @@ El formulario solo deja pasar a la página de acceso cuando la hoja confirma que
 ## Antes de salir en vivo
 - [ ] Skill gratis del diagnóstico (nombre exacto con Gerardo) + guía de reportes en PDF → un solo .zip en `descargas/` y `DESCARGA_SKILL_URL`.
 - [ ] Los 5 agentes y la guía de instalación → `LINK_AGENTES` y `LINK_GUIA` en `Registro.gs`.
-- [x] Link de Calendly → `CITA_URL` en `config.js` y `LINK_CITA` en `Registro.gs`.
+- [x] Link de Calendly → `CITA_URL` en `config.js` (botón de la página 3). El correo de bienvenida agenda por WhatsApp.
 - [ ] Videos 1 y 2 → `VIDEO_DIAGNOSTICO_URL` y `VIDEO_PRIORIDADES_URL`.
 - [ ] PayPal: Client ID en `config.js`; Client ID y Secret en Propiedades del script de la hoja.
 - [ ] Instalar el registro en la hoja con la cuenta cursos@summaproducts.com (de ahí sale el correo de bienvenida) y correr `prueba` y `pruebaCorreo`.

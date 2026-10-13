@@ -29,6 +29,6 @@ pide los cambios en el chat y Claude los hace y los publica.
 
 - Entrega después del pago (acordado 2026-10-13): correo automático en cuanto
   PayPal confirma el pago, con la descarga de los 5 agentes, la guía de
-  instalación y el link de Calendly para la sesión 1 a 1. Se arma con el Apps
+  instalación y un botón de WhatsApp para agendar la sesión 1 a 1 (sin Calendly). Se arma con el Apps
   Script de la hoja. Se construye cuando existan los archivos de los 5 agentes.
   Recordárselo al dueño en cuanto los mande.
