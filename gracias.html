@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Gracias · Profit AI System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body data-pagina="gracias">
+<div class="wrap"><nav>
+  <a class="brand" href="index.html">Profit AI System<small>by Gerardo Villa</small></a>
+  <a class="btn ghost" href="#correo">Quiero mi diagnóstico</a>
+</nav></div>
+<main><section><div class="wrap final">
+  <span class="eyebrow">Pago recibido</span>
+  <h1>Bienvenido a Profit AI System.</h1>
+  <p class="muted" style="max-width:620px;font-size:18px">PayPal te mandó tu comprobante. En las próximas horas te escribimos al correo de tu pago con la descarga de las skills, la guía de instalación y el enlace para agendar tu sesión 1 a 1.</p>
+  <p class="muted" id="pedido" hidden style="font-family:var(--f-mono);font-size:13px"></p>
+  <a class="btn wa-btn" href="#" data-href="WHATSAPP_URL"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg>Escríbenos por WhatsApp</a>
+</div></section></main>
+<script>(function(){var id=new URLSearchParams(location.search).get("pedido");if(id){var p=document.getElementById("pedido");p.textContent="Número de operación de PayPal: "+id;p.hidden=false;}})();</script>
+<div class="wrap"><footer>
+  <span>© 2026 Gerardo Villa · Summa Products</span>
+  <span><a href="#" data-href="CORREO_MAILTO" data-cfg="CORREO"></a> · <a href="aviso-de-privacidad.html">Aviso de privacidad</a></span>
+</footer></div>
+<a class="wa" href="#" data-href="WHATSAPP_URL" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg><span>WhatsApp</span>
+</a>
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>if(window.ProfitAI)window.ProfitAI.palomita("pago");</script>
+</body>
+</html>
