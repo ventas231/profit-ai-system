@@ -30,6 +30,6 @@
 </a>
 <script src="assets/config.js"></script>
 <script src="assets/app.js"></script>
-<script>if(window.ProfitAI)window.ProfitAI.palomita("pago");</script>
+<script>if(window.ProfitAI)window.ProfitAI.palomita("pago",new URLSearchParams(location.search).get("pedido")||"");</script>
 </body>
 </html>

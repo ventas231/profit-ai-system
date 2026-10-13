@@ -6,7 +6,7 @@
   if (!box) return;
   var msg = function (t) { aviso.textContent = t; aviso.hidden = false; };
   var gracias = function (id) {
-    if (window.ProfitAI) window.ProfitAI.palomita("pago");
+    if (window.ProfitAI) window.ProfitAI.palomita("pago", id);
     setTimeout(function () { location.href = "gracias.html" + (id ? "?pedido=" + encodeURIComponent(id) : ""); }, 600);
   };
   var load = function (src, done) {
