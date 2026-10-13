@@ -19,12 +19,9 @@ window.CONFIG = {
   CITA_URL: "",
 
   // ---- Precios ----
-  // Se muestran en dólares. Equivalencia de los precios de trabajo en MXN
-  // con el FIX Banxico del 9/oct/2026 (18.4163). Precio final en USD pendiente de Gerardo.
-  PRECIO_N1: "US$489",
+  // Todo en dólares (USD).
+  PRECIO_N1: "US$497",
   PRECIO_N2: "US$2,444",
-  PRECIO_N1_MXN: "$9,000 MXN",
-  PRECIO_N2_MXN: "$45,000 MXN",
 
   // ---- Hoja de Google donde se registran los correos y las palomitas ----
   // URL de la "aplicación web" de Apps Script instalada en la hoja (ver README).
@@ -37,7 +34,7 @@ window.CONFIG = {
   PAYPAL_CLIENT_ID: "",            // Client ID (sandbox para pruebas, live para cobrar)
   PAYPAL_HOSTED_BUTTON_ID: "",     // ID del botón alojado del Nivel 1
   PAYPAL_MODO: "sandbox",          // "sandbox" o "live" (live solo con precio aprobado)
-  N1_MONTO: "489.00",              // usado solo si no hay botón alojado
+  N1_MONTO: "497.00",              // usado solo si no hay botón alojado
   MONEDA: "USD",
 
   // ---- Videos: enlace para insertar (YouTube no listado o Vimeo) ----
