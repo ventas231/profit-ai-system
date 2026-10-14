@@ -44,5 +44,5 @@ window.CONFIG = {
   // ---- Descargas del diagnóstico ----
   // Un solo .zip con la skill del diagnóstico y la guía de reportes en PDF.
   // Va en la carpeta descargas/ del sitio, por ejemplo "descargas/kit-diagnostico.zip".
-  DESCARGA_SKILL_URL: ""
+  DESCARGA_SKILL_URL: "descargas/kit-diagnostico-profit-ai-system.zip"
 };
