@@ -129,15 +129,13 @@ def construir():
         ('2', '<b>Business Report</b> por Child', 'Sesiones y unidades, para ver conversión.'),
         ('3', '<b>Bulk de publicidad</b> (.xlsx)', 'Gasto y ventas por anuncios, por SKU.'),
         ('4', '<b>Fee Preview</b>', 'Nombres, ASIN y SKU para unir todo.'),
-        ('5', '<b>Plantilla de costos por Child</b>', 'Tu costo por pieza. Viene en tu kit.'),
+        ('5', '<b>Plantilla de costos</b> (Excel)<br/><font size="8" color="#5b6577">PAS_Plantilla_Costos_por_Child.xlsx</font>', 'Tu costo por pieza. Es el Excel que viene en tu kit.'),
         ('6', '<b>Cuenta de Claude</b>', 'Donde corre la skill del diagnóstico.')]]
-    t = Table(tabla, colWidths=[9*mm, 58*mm, None])
+    t = Table(tabla, colWidths=[9*mm, 66*mm, None])
     t.setStyle(TableStyle([('LINEBELOW', (0,0), (-1,-1), 0.5, LINE), ('VALIGN', (0,0), (-1,-1), 'TOP'),
                            ('TOPPADDING', (0,0), (-1,-1), 6), ('BOTTOMPADDING', (0,0), (-1,-1), 6),
                            ('LEFTPADDING', (0,0), (-1,-1), 0), ('LINEBELOW', (0,0), (-1,0), 1.2, ORANGE)]))
-    st += [t, Spacer(1, 10),
-           recuadro('<b>Importante:</b> antes de subir cualquier reporte, borra los datos de tus compradores. '
-                    'Te decimos exactamente cómo en la sección 6.'), PageBreak()]
+    st += [t, PageBreak()]
 
     # ---- 1 Transacciones
     st += [P('REPORTE 1 DE 4', 'eyebrow'), P('Transacciones', 'h1'),
@@ -148,8 +146,7 @@ def construir():
                   'Dale <b>Solicitar</b> y, cuando esté listo, <b>Descargar</b> (CSV).']),
            Captura('01-transacciones-menu.png', 'Pagos › Reports Repository, con el menú abierto'),
            Captura('02-transacciones-filtros.png', 'Tipo "Transacción" y el rango de fechas del mes cerrado'),
-           recuadro('<b>Evita estos dos errores:</b> no uses el botón Download de Transaction View (corta a 600 filas) '
-                    'ni el tipo Summary.'), PageBreak()]
+           PageBreak()]
 
     # ---- 2 Business Report
     st += [P('REPORTE 2 DE 4', 'eyebrow'), P('Business Report por Child', 'h1'),
@@ -179,7 +176,7 @@ def construir():
 
     # ---- 5 Costos
     st += [P('TU PLANTILLA', 'eyebrow'), P('Costos por Child', 'h1'),
-           P('Abre <b>Plantilla de costos por Child.xlsx</b> de tu kit y llena solo las celdas color durazno.'),
+           P('Abre el Excel <b>PAS_Plantilla_Costos_por_Child.xlsx</b> de tu kit y llena solo las celdas color durazno.'),
            pasos(['<b>Una fila por Child</b>: cada talla, color o presentación es una fila. Basta el ASIN o el SKU.',
                   '<b>Costo unitario</b>: una pieza, sin IVA, en la moneda de tu tienda. El costo que tú confirmas.',
                   '<b>¿Ya incluye flete y aduana?</b> Si es Sí, se toman en cero. Si es No, llena flete y aduana por unidad.',
@@ -188,23 +185,13 @@ def construir():
            Captura('06-plantilla-costos.png', 'La plantilla llena con 2 o 3 productos de ejemplo'),
            PageBreak()]
 
-    # ---- 6 Borrar compradores
-    st += [P('PRIVACIDAD', 'eyebrow'), P('Borra los datos de tus compradores', 'h1'),
-           P('El reporte de transacciones puede traer datos personales. El análisis no usa ninguno, así que bórralos antes de subirlo.'),
-           pasos(['Abre el CSV de transacciones en Excel o Google Sheets.',
-                  'Borra las columnas completas de: <b>nombre, dirección, ciudad, estado, código postal, correo y teléfono</b>.',
-                  'Guarda el archivo otra vez como CSV.']),
-           Captura('07-borrar-columnas.png', 'Columnas de compradores seleccionadas, con datos tapados'),
-           recuadro('Cuida tus capturas también: si compartes una pantalla, que no se vean datos de clientes.'),
-           PageBreak()]
-
     # ---- 7 Correr
     st += [P('ÚLTIMO PASO', 'eyebrow'), P('Corre tu diagnóstico', 'h1'),
            pasos(['En Claude, instala la skill del diagnóstico que viene en tu kit.',
-                  'Abre un chat nuevo y sube los 4 reportes y tu plantilla de costos.',
+                  'Abre un chat nuevo y sube los 4 reportes y tu Excel de costos.',
                   'Pide: <i>"Corre mi diagnóstico de rentabilidad"</i>.',
                   'Revisa tus tres prioridades del mes.']),
-           Captura('08-instalar-skill.png', 'Dónde se instala la skill en Claude'),
+           Captura('07-instalar-skill.png', 'Dónde se instala la skill en Claude'),
            Spacer(1, 4), P('Si te falta algo, igual corre', 'h2')]
     falta = [['Sin costos', 'Se entrega todo menos el retorno sobre costo, y se avisa qué te falta.'],
              ['Sin bulk de publicidad', 'Sin ACOS ni TACOS. Las decisiones de publicidad quedan fuera.'],
