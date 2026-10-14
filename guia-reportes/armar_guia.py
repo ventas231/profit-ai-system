@@ -173,18 +173,42 @@ def construir():
     # ---- 3 Bulk
     st += [P('REPORTE 3 DE 4', 'eyebrow'), P('Bulk Operations <font color="#5b6577" size="14">(publicidad)</font>', 'h1'),
            P('Gasto y ventas de tus anuncios por SKU. Con él salen tu ACOS y tu TACOS.'),
-           pasos(['Entra a <b>Advertising › Campaign Manager › Bulk Operations</b> (Operaciones masivas).',
-                  'Elige el mismo mes cerrado e incluye las campañas de Sponsored Products.',
-                  'Genera el archivo y descarga el <b>.xlsx</b>.']),
-           Captura('04-bulk-publicidad.png', 'Publicidad › Operaciones masivas, con fechas y opciones marcadas'),
+           recuadro('<b>Ojo:</b> este reporte <b>no</b> está en Seller Central. Se descarga en tu <b>consola de publicidad</b> '
+                    '(Amazon Ads, se abre en otra ventana con la dirección <b>advertising.amazon...</b>). '
+                    'Revisa arriba que sea tu cuenta y el país correcto (por ejemplo, <b>Mexico</b>).'),
+           Spacer(1, 6),
+           P('<b>A · Entra a tu consola de publicidad</b>', 'p'),
+           pasos(['En Seller Central abre el menú (☰) › <b>Advertising</b> (Publicidad) › <b>Campaign Manager</b>. '
+                  'Se abre la consola de publicidad.',
+                  'En el menú de la izquierda elige <b>Bulk operations</b> (Operaciones masivas).']),
+           Captura('04a-bulk-menu.png', 'Consola de publicidad › Bulk operations', maxh=80*mm),
+           PageBreak(),
+           KeepTogether([P('<b>B · Pide el archivo</b>', 'p'),
+           pasos(['Revisa que el país sea el de tu tienda (por ejemplo, <b>Mexico</b>).',
+                  'Dale <b>Download campaigns</b> (Descargar campañas).']),
+           Captura('04b-bulk-download.png', 'País · Download campaigns', maxh=80*mm)]),
+           KeepTogether([P('<b>C · Elige fechas y datos</b>', 'p'),
+           pasos(['En <b>Date range for performance metrics</b> pon del primer al último día del mes cerrado.',
+                  'Deja marcado <b>Performance data</b> (datos de rendimiento).',
+                  'Deja marcado <b>Sponsored Products data</b>. Lo demás puede quedarse como está.',
+                  'Dale <b>Download</b>. Cuando en la lista diga <b>Success</b>, dale <b>Download</b> en esa fila para bajar el <b>.xlsx</b>.']),
+           Captura('04c-bulk-opciones.png', 'Date range · Performance data · Sponsored Products data · Download', maxh=95*mm)]),
            PageBreak()]
 
     # ---- 4 Fee Preview
-    st += [P('REPORTE 4 DE 4', 'eyebrow'), P('Fee Preview', 'h1'),
-           P('Trae nombres, ASIN y SKU para que el diagnóstico una todos los reportes.'),
-           pasos(['Abre <b>Reports › Fulfillment</b> (Logística de Amazon) y busca <b>Fee Preview</b> (Vista previa de comisiones).',
-                  'Solicita el reporte y descárgalo.']),
-           Captura('05-fee-preview.png', 'Logística de Amazon › Vista previa de comisiones'),
+    st += [P('REPORTE 4 DE 4', 'eyebrow'), P('Fee Preview <font color="#5b6577" size="14">(Vista previa de comisiones)</font>', 'h1'),
+           P('Trae nombres, ASIN y SKU para que el diagnóstico una todos los reportes. Este reporte no pide fechas: '
+             'muestra tus comisiones actuales.'),
+           P('<b>A · Llega a la pantalla</b>', 'p'),
+           pasos(['Abre el menú (☰) y entra a <b>Reports</b> (Informes).',
+                  'Elige <b>Fulfillment</b> (Logística de Amazon).']),
+           Captura('05a-fee-menu.png', 'Menu › Reports › Fulfillment', maxh=85*mm),
+           PageBreak(),
+           KeepTogether([P('<b>B · Pide y descarga el reporte</b>', 'p'),
+           pasos(['En la columna izquierda, bajo <b>Payments</b>, elige <b>Fee Preview</b>.',
+                  'Dale <b>Request .csv Download</b> (Solicitar descarga .csv).',
+                  'En la tabla de abajo, cuando aparezca tu reporte, dale <b>Download</b>.']),
+           Captura('05b-fee-preview.png', 'Payments › Fee Preview · Request .csv Download · Download', maxh=95*mm)]),
            PageBreak()]
 
     # ---- 5 Costos
