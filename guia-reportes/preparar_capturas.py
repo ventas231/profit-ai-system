@@ -36,3 +36,7 @@ hacer(6, (0, 120, 1600, 838), [(70, 187, 158, 213), (382, 374, 519, 401)],
 # 4c · Ventana Download Campaigns: fechas, Performance data y Download
 im = hacer(7, (0, 0, 1600, 900), [(746, 321, 923, 350), (742, 408, 872, 428), (742, 549, 892, 568), (975, 753, 1053, 780)])
 im.crop((520, 160, 1095, 800)).save(f'{out}/04c-bulk-opciones.png')
+# 5a · Menú › Reports › Fulfillment
+hacer(8, (0, 120, 495, 800), [(4, 427, 196, 461), (208, 500, 450, 535)]).save(f'{out}/05a-fee-menu.png')
+# 5b · Payments › Fee Preview · Request .csv Download · Download (la captura 9 repite lo mismo con un globo de ayuda)
+hacer(10, (0, 120, 1600, 838), [(4, 747, 190, 769), (284, 320, 433, 346), (1346, 473, 1408, 495)]).save(f'{out}/05b-fee-preview.png')
