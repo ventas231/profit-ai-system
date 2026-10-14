@@ -38,8 +38,8 @@ def P(t, s='p'): return Paragraph(t, S[s])
 
 class Captura(Flowable):
     """Imagen de capturas/<archivo> o, si no existe, un recuadro punteado con lo que debe mostrar."""
-    def __init__(self, archivo, describe, alto=70*mm):
-        super().__init__(); self.archivo, self.describe, self.alto = archivo, describe, alto
+    def __init__(self, archivo, describe, alto=70*mm, maxh=110*mm):
+        super().__init__(); self.archivo, self.describe, self.alto, self.maxh = archivo, describe, alto, maxh
         self.ruta = os.path.join(CAPTURAS, archivo)
     def wrap(self, aw, ah):
         self.aw = aw
@@ -47,7 +47,7 @@ class Captura(Flowable):
             from reportlab.lib.utils import ImageReader
             iw, ih = ImageReader(self.ruta).getSize()
             self.w = min(aw, iw); self.h = self.w * ih / iw
-            if self.h > 110*mm: self.h = 110*mm; self.w = self.h * iw / ih
+            if self.h > self.maxh: self.h = self.maxh; self.w = self.h * iw / ih
             return aw, self.h + 6*mm
         return aw, self.alto + 6*mm
     def draw(self):
@@ -122,12 +122,15 @@ def construir():
     st += [P('ANTES DE EMPEZAR', 'eyebrow'), P('Qué vas a necesitar', 'h1'),
            P('Cuatro reportes de Seller Central, tu plantilla de costos y una cuenta de Claude que permita usar skills. '
              'Todo del <b>mismo mes calendario completo y cerrado</b>: del día 1 al último día del mes. Nunca el mes en curso.'),
-           Spacer(1, 4)]
+           recuadro('<b>Antes de empezar:</b> te recomendamos tener Seller Central <b>en inglés</b> (arriba a la derecha, '
+                    'el selector de idioma: <b>EN</b>), porque así se llaman los menús en esta guía. Revisa también, arriba a la '
+                    'izquierda, que estés en <b>tu tienda</b> y en el <b>país</b> correcto (por ejemplo, Mexico).'),
+           Spacer(1, 8)]
     tabla = [[Paragraph('<b>#</b>', S['step']), Paragraph('<b>Archivo</b>', S['step']), Paragraph('<b>Para qué sirve</b>', S['step'])]] + [
         [Paragraph(a, S['step']), Paragraph(b, S['step']), Paragraph(c, S['step'])] for a, b, c in [
-        ('1', '<b>Transacciones</b> (CSV)', 'El más importante: ventas, comisión, FBA, devoluciones, impuestos y cargos.'),
-        ('2', '<b>Business Report</b> por Child', 'Sesiones y unidades, para ver conversión.'),
-        ('3', '<b>Bulk de publicidad</b> (.xlsx)', 'Gasto y ventas por anuncios, por SKU.'),
+        ('1', '<b>Transaction</b> (Transacciones) · CSV', 'El más importante: ventas, comisión, FBA, devoluciones, impuestos y cargos.'),
+        ('2', '<b>Business Report</b> · By Child Item', 'Sesiones y unidades, para ver conversión.'),
+        ('3', '<b>Bulk Operations</b> (publicidad) · .xlsx', 'Gasto y ventas por anuncios, por SKU.'),
         ('4', '<b>Fee Preview</b>', 'Nombres, ASIN y SKU para unir todo.'),
         ('5', '<b>Plantilla de costos</b> (Excel)<br/><font size="8" color="#5b6577">PAS_Plantilla_Costos_por_Child.xlsx</font>', 'Tu costo por pieza. Es el Excel que viene en tu kit.'),
         ('6', '<b>Cuenta de Claude</b>', 'Donde corre la skill del diagnóstico.')]]
@@ -138,29 +141,39 @@ def construir():
     st += [t, PageBreak()]
 
     # ---- 1 Transacciones
-    st += [P('REPORTE 1 DE 4', 'eyebrow'), P('Transacciones', 'h1'),
+    st += [P('REPORTE 1 DE 4', 'eyebrow'), P('Transaction <font color="#5b6577" size="14">(Transacciones)</font>', 'h1'),
            P('Es el único reporte que trae comisión, FBA e impuestos. Sin él, el diagnóstico no corre.'),
-           pasos(['En Seller Central abre <b>Pagos › Reports Repository</b>.',
-                  'En <b>Tipo de reporte</b> elige <b>Transacción</b>.',
-                  'En <b>Rango de fechas</b> elige el mes cerrado completo (del 1 al último día).',
-                  'Dale <b>Solicitar</b> y, cuando esté listo, <b>Descargar</b> (CSV).']),
-           Captura('01-transacciones-menu.png', 'Pagos › Reports Repository, con el menú abierto'),
-           Captura('02-transacciones-filtros.png', 'Tipo "Transacción" y el rango de fechas del mes cerrado'),
+           P('<b>A · Llega a la pantalla</b>', 'p'),
+           pasos(['Abre el menú (☰) y entra a <b>Payments</b> (Pagos).',
+                  'Elige <b>Reports Repository</b> (Repositorio de reportes).']),
+           Captura('01-transacciones-menu.png', 'Menu › Payments › Reports Repository', maxh=85*mm),
+           KeepTogether([P('<b>B · Pide y descarga el reporte</b>', 'p'),
+           pasos(['En <b>Report Type</b> (Tipo de reporte) elige <b>Transaction</b>. Deja <b>Account Type</b> en <b>Standard Orders</b>.',
+                  'En <b>Reporting Date Range</b> marca <b>Month</b> y elige el <b>mes</b> y el <b>año</b> del mes cerrado.',
+                  'Dale <b>Request Report</b> (Solicitar reporte).',
+                  'Cuando el <b>Status</b> diga <b>Ready</b>, dale <b>Download CSV</b>. Si dice In Progress, espera y dale Refresh.']),
+           Captura('02-transacciones-filtros.png', 'Report Type: Transaction · Month · Request Report · Download CSV')]),
            PageBreak()]
 
     # ---- 2 Business Report
-    st += [P('REPORTE 2 DE 4', 'eyebrow'), P('Business Report por Child', 'h1'),
+    st += [P('REPORTE 2 DE 4', 'eyebrow'), P('Business Report <font color="#5b6577" size="14">· By Child Item</font>', 'h1'),
            P('Sesiones y unidades por producto, para medir conversión.'),
-           pasos(['Abre <b>Informes › Business Reports</b>.',
-                  'En el menú de la izquierda elige <b>Ventas y tráfico por página de detalle (Child)</b>.',
-                  'Pon el mismo mes cerrado y descarga el CSV.']),
-           Captura('03-business-report.png', 'Business Reports › Ventas y tráfico por página de detalle (Child)'),
+           P('<b>A · Llega a la pantalla</b>', 'p'),
+           pasos(['Abre el menú (☰) y entra a <b>Reports</b> (Informes).',
+                  'Elige <b>Business Reports</b> (Informes de negocio).']),
+           Captura('03a-business-menu.png', 'Menu › Reports › Business Reports', maxh=85*mm),
+           KeepTogether([P('<b>B · Elige el reporte y descárgalo</b>', 'p'),
+           pasos(['En la columna izquierda, bajo <b>By ASIN</b>, elige <b>Detail Page Sales and Traffic By Child Item</b> '
+                  '(Ventas y tráfico por página de detalle, por Child).',
+                  'En <b>Date</b> elige <b>Custom</b> y pon del primer al último día del mismo mes cerrado.',
+                  'Dale <b>Download (.csv)</b>.']),
+           Captura('03b-business-report-child.png', 'By ASIN › Detail Page Sales and Traffic By Child Item · fechas · Download (.csv)')]),
            PageBreak()]
 
     # ---- 3 Bulk
-    st += [P('REPORTE 3 DE 4', 'eyebrow'), P('Bulk de publicidad', 'h1'),
+    st += [P('REPORTE 3 DE 4', 'eyebrow'), P('Bulk Operations <font color="#5b6577" size="14">(publicidad)</font>', 'h1'),
            P('Gasto y ventas de tus anuncios por SKU. Con él salen tu ACOS y tu TACOS.'),
-           pasos(['Entra a la consola de <b>Publicidad › Operaciones masivas</b> (Bulk operations).',
+           pasos(['Entra a <b>Advertising › Campaign Manager › Bulk Operations</b> (Operaciones masivas).',
                   'Elige el mismo mes cerrado e incluye las campañas de Sponsored Products.',
                   'Genera el archivo y descarga el <b>.xlsx</b>.']),
            Captura('04-bulk-publicidad.png', 'Publicidad › Operaciones masivas, con fechas y opciones marcadas'),
@@ -169,7 +182,7 @@ def construir():
     # ---- 4 Fee Preview
     st += [P('REPORTE 4 DE 4', 'eyebrow'), P('Fee Preview', 'h1'),
            P('Trae nombres, ASIN y SKU para que el diagnóstico una todos los reportes.'),
-           pasos(['Abre <b>Informes › Logística de Amazon</b> y busca <b>Vista previa de comisiones</b> (Fee Preview).',
+           pasos(['Abre <b>Reports › Fulfillment</b> (Logística de Amazon) y busca <b>Fee Preview</b> (Vista previa de comisiones).',
                   'Solicita el reporte y descárgalo.']),
            Captura('05-fee-preview.png', 'Logística de Amazon › Vista previa de comisiones'),
            PageBreak()]
