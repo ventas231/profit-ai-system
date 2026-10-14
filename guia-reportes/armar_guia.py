@@ -219,16 +219,20 @@ def construir():
                   '<b>¿Ya incluye flete y aduana?</b> Si es Sí, se toman en cero. Si es No, llena flete y aduana por unidad.',
                   '<b>Otros costos</b>: empaque, etiquetado o preparación por pieza.',
                   'El <b>costo total por unidad</b> se calcula solo. Borra la fila gris de ejemplo.']),
-           Captura('06-plantilla-costos.png', 'La plantilla llena con 2 o 3 productos de ejemplo'),
+           Captura('06-plantilla-costos.png', 'Pestaña Costos por Child · llena solo la zona color durazno', maxh=85*mm),
            PageBreak()]
 
     # ---- 7 Correr
     st += [P('ÚLTIMO PASO', 'eyebrow'), P('Corre tu diagnóstico', 'h1'),
-           pasos(['En Claude, instala la skill del diagnóstico que viene en tu kit.',
-                  'Abre un chat nuevo y sube los 4 reportes y tu Excel de costos.',
+           P('<b>A · Instala la skill en Claude</b> (solo la primera vez)', 'p'),
+           pasos(['En Claude abre <b>Personalización</b> (Customize) y entra a la pestaña <b>Skills</b>.',
+                  'Dale <b>+ Agregar</b> (Add).',
+                  'Elige <b>Subir Skill</b> (Upload skill) y selecciona el archivo de la skill que viene en tu kit.']),
+           Captura('07-instalar-skill.png', 'Personalización › Skills › + Agregar › Subir Skill', maxh=60*mm),
+           P('<b>B · Corre tu diagnóstico</b>', 'p'),
+           pasos(['Abre un chat nuevo y sube los 4 reportes y tu Excel de costos.',
                   'Pide: <i>"Corre mi diagnóstico de rentabilidad"</i>.',
                   'Revisa tus tres prioridades del mes.']),
-           Captura('07-instalar-skill.png', 'Dónde se instala la skill en Claude'),
            Spacer(1, 4), P('Si te falta algo, igual corre', 'h2')]
     falta = [['Sin costos', 'Se entrega todo menos el retorno sobre costo, y se avisa qué te falta.'],
              ['Sin bulk de publicidad', 'Sin ACOS ni TACOS. Las decisiones de publicidad quedan fuera.'],

@@ -12,8 +12,8 @@ def marca(d, box, n=None):
         d.ellipse((cx, cy, cx+28, cy+28), fill=OR); d.text((cx+14, cy+14), str(n), fill='white', font=F, anchor='mm')
 def tapa(im, box):
     im.paste(im.crop(box).filter(ImageFilter.GaussianBlur(14)), box[:2])
-def hacer(n, crop, marcas, tapas=()):
-    im = Image.open(f'{src}/{n}.jpg').convert('RGB')
+def hacer(n, crop, marcas, tapas=(), ext='jpg'):
+    im = Image.open(f'{src}/{n}.{ext}').convert('RGB')
     for t in tapas: tapa(im, t)
     d = ImageDraw.Draw(im)
     for i, b in enumerate(marcas): marca(d, b, i+1)
@@ -25,9 +25,9 @@ hacer(2, (0, 120, 1600, 838), [(419, 426, 579, 452), (617, 352, 998, 430), (1232
       ).save(f'{out}/02-transacciones-filtros.png')
 # 3a · Menú › Reports › Business Reports
 hacer(3, (0, 120, 495, 800), [(4, 427, 196, 461), (208, 428, 450, 461)]).save(f'{out}/03a-business-menu.png')
-# 3b · Business Reports: By Child Item, fechas y Download (.csv). La gráfica de tráfico se tapa.
-hacer(4, (0, 120, 1600, 838), [(28, 416, 150, 444), (208, 683, 482, 710), (226, 722, 338, 750)],
-      tapas=[(210, 210, 1560, 590)]).save(f'{out}/03b-business-report-child.png')
+# 3b · Business Reports › By Child Item (captura 13): fechas y Download (.csv). Se tapan productos, ASIN y números.
+hacer(13, (0, 160, 1600, 838), [(29, 567, 154, 597), (208, 397, 480, 424), (226, 437, 338, 464)],
+      tapas=[(210, 572, 1550, 838)]).save(f'{out}/03b-business-report-child.png')
 # 4a · Consola de publicidad: menú izquierdo › Bulk operations (solo los menús; métricas y marcas fuera)
 hacer(5, (0, 120, 480, 640), [(64, 500, 216, 528)], tapas=[(228, 170, 480, 640)]).save(f'{out}/04a-bulk-menu.png')
 # 4b · Bulk Operations: país y Download campaigns. Se tapan el historial (archivos y correos) y el nombre de la cuenta.
@@ -40,3 +40,7 @@ im.crop((520, 160, 1095, 800)).save(f'{out}/04c-bulk-opciones.png')
 hacer(8, (0, 120, 495, 800), [(4, 427, 196, 461), (208, 500, 450, 535)]).save(f'{out}/05a-fee-menu.png')
 # 5b · Payments › Fee Preview · Request .csv Download · Download (la captura 9 repite lo mismo con un globo de ayuda)
 hacer(10, (0, 120, 1600, 838), [(4, 747, 190, 769), (284, 320, 433, 346), (1346, 473, 1408, 495)]).save(f'{out}/05b-fee-preview.png')
+# 6 · Plantilla de costos (vacía, con la fila de ejemplo): pestaña Costos por Child y la zona color durazno
+hacer(12, (0, 140, 1600, 800), [(143, 779, 252, 798), (19, 340, 1259, 780)]).save(f'{out}/06-plantilla-costos.png')
+# 7 · Claude › Personalización › Skills › Agregar › Subir Skill. Se deja fuera la lista de skills internas.
+hacer(11, (0, 0, 1313, 385), [(55, 80, 124, 118), (1108, 81, 1252, 117), (1050, 138, 1246, 166)], ext='png').save(f'{out}/07-instalar-skill.png')
