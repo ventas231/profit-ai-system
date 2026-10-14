@@ -86,7 +86,7 @@ def encabezado(c, doc):
     c.setFillColor(white); c.setFont('Sans-B', 10); c.drawString(18*mm, h - 10*mm, 'Profit AI System')
     c.setFillColor(ORANGE); c.setFont('Mono', 7.5); c.drawRightString(w - 18*mm, h - 10*mm, 'GUÍA DE REPORTES · DIAGNÓSTICO DE RENTABILIDAD')
     c.setFillColor(MUTED); c.setFont('Sans', 8)
-    c.drawString(18*mm, 10*mm, '© 2026 Gerardo Villa · Summa Products')
+    c.drawString(18*mm, 10*mm, '© 2026 Profit AI System · Gerardo Villa')
     c.drawRightString(w - 18*mm, 10*mm, 'Página %d' % doc.page)
     c.restoreState()
 
@@ -111,7 +111,7 @@ def portada(c, doc):
 
 def construir():
     doc = BaseDocTemplate(SALIDA, pagesize=letter, leftMargin=18*mm, rightMargin=18*mm, topMargin=24*mm, bottomMargin=18*mm,
-                          title='Guía de reportes · Profit AI System', author='Gerardo Villa · Summa Products')
+                          title='Guía de reportes · Profit AI System', author='Profit AI System · Gerardo Villa')
     marco = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id='f')
     doc.addPageTemplates([PageTemplate(id='portada', frames=[marco], onPage=portada),
                           PageTemplate(id='normal', frames=[marco], onPage=encabezado)])
