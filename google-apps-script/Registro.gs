@@ -6,6 +6,9 @@
  *   CORREO | DÍA Y HORA | DESCARGO LA SKILL | CHECK OUT
  * Columnas opcionales: si las agregas en la fila 1, también se llenan solas:
  *   VIO NIVELES | WHATSAPP | VIO VIDEO | PAGÓ | AGENDÓ CITA | ACCESO ENVIADO | ORIGEN
+ * VISITAS y ÚLTIMA VISITA se agregan solas al final de la fila 1 si no existen:
+ *   cuentan cuántas veces entró cada correo (al registrarse y cada vez que regresa).
+ * Pestaña HISTORIAL (se crea sola): una fila por cada cosa que hace cada correo, con fecha y hora.
  *
  * Correo de bienvenida del Nivel 1: al llegar el evento "pago" con su número de
  * pedido, el script confirma con PayPal que el pedido está cobrado por el monto
@@ -53,7 +56,9 @@ function doPost(e) {
     const email = String(d.email || '').trim().toLowerCase();
     if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return salida({ ok: false, error: 'correo' });
 
-    const hoja = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    const libro = SpreadsheetApp.getActiveSpreadsheet();
+    const hoja = libro.getSheets()[0];
+    asegurarColumnas(hoja, ['VISITAS', 'ÚLTIMA VISITA']);
     const enc = hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].map(normaliza);
     const col = (nombre) => enc.indexOf(normaliza(nombre)) + 1;
     const cCorreo = col('CORREO');
@@ -68,6 +73,14 @@ function doPost(e) {
       if (col('DIA Y HORA')) hoja.getRange(fila, col('DIA Y HORA')).setValue(ahora);
       const origen = [d.utm_source, d.utm_campaign, d.utm_content].filter(String).join(' · ');
       if (col('ORIGEN') && origen) hoja.getRange(fila, col('ORIGEN')).setValue(origen);
+    }
+
+    historial(libro, ahora, email, d.accion === 'evento' ? d.evento : d.accion, d.pagina);
+
+    if (d.accion === 'registro' || d.accion === 'visita') {   // cada entrada suma una visita
+      const cVis = col('VISITAS');
+      if (cVis) { const c = hoja.getRange(fila, cVis); c.setValue((Number(c.getValue()) || 0) + 1); }
+      if (col('ULTIMA VISITA')) hoja.getRange(fila, col('ULTIMA VISITA')).setValue(ahora);
     }
 
     if (d.accion === 'evento' && COLUMNAS[d.evento] && col(COLUMNAS[d.evento])) {
@@ -149,6 +162,23 @@ function pruebaCorreo() {
   const html = armarCorreo(yo, 'PRUEBA-0000');
   MailApp.sendEmail({ to: yo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a Profit AI System · Nivel 1', htmlBody: html });
   Logger.log('Correo de prueba enviado a ' + yo);
+}
+
+// Agrega al final de la fila 1 las columnas que falten (no mueve ni renombra las que ya existen).
+function asegurarColumnas(hoja, nombres) {
+  const enc = hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].map(normaliza);
+  nombres.forEach(function (n) {
+    if (enc.indexOf(normaliza(n)) === -1) { hoja.getRange(1, hoja.getLastColumn() + 1).setValue(n); enc.push(normaliza(n)); }
+  });
+}
+
+// Una fila por cada cosa que hace cada correo, para ver cuántas veces regresa y qué hace.
+function historial(libro, ahora, email, que, pagina) {
+  let h = libro.getSheetByName('HISTORIAL');
+  if (!h) { h = libro.insertSheet('HISTORIAL'); h.appendRow(['DÍA Y HORA', 'CORREO', 'QUÉ HIZO', 'PÁGINA']); h.setFrozenRows(1); }
+  const nombres = { registro: 'Dejó su correo', visita: 'Regresó a la página', descargo_skill: 'Descargó el kit', checkout: 'Fue al pago',
+    vio_niveles: 'Vio los niveles', whatsapp: 'Abrió WhatsApp', vio_video: 'Vio el video', pago: 'Pagó', agendo_cita: 'Agendó cita' };
+  h.appendRow([ahora, email, nombres[que] || que, pagina || '']);
 }
 
 function buscarFila(hoja, columna, email) {
