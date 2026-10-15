@@ -48,6 +48,13 @@
   }
   window.ProfitAI = { palomita: palomita, correo: correo };
 
+  // ---- Cada visita cuenta: si ya dejó su correo antes, se registra cada vez que regresa (una vez por visita) ----
+  var ss = {
+    get: function (k) { try { return sessionStorage.getItem("pais_" + k) || ""; } catch (e) { return ""; } },
+    set: function (k, v) { try { sessionStorage.setItem("pais_" + k, v); } catch (e) {} }
+  };
+  if (correo() && !ss.get("visita")) { ss.set("visita", "1"); hoja("visita", correo()).catch(function () {}); }
+
   // ---- Pago: muestra a qué correo le llega su acceso ----
   var destino = document.getElementById("correo-destino");
   if (destino && correo()) destino.textContent = "a " + correo() + ", el correo que pusiste al registrarte";
@@ -112,7 +119,7 @@
       var btn = f.querySelector("button");
       var texto = btn.textContent;
       btn.disabled = true; btn.textContent = "Guardando…";
-      var irAcceso = function () { ls.set("correo", email); location.href = "acceso.html"; };
+      var irAcceso = function () { ls.set("correo", email); ss.set("visita", "1"); location.href = "acceso.html"; };
       var error = function () {
         btn.disabled = false; btn.textContent = texto;
         aviso.textContent = "No pudimos registrar tu correo. Revisa tu conexión e intenta de nuevo, o escríbenos a " + C.CORREO + ".";
