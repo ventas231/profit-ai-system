@@ -260,3 +260,6 @@ body{margin:0}
   .hero .lead{font-size:17px}
   .capture .row .btn{flex:1 1 100%}
 }
+.elige{display:grid;gap:4px;margin:-12px 0 24px}
+.elige b{font:800 26px var(--f-display);color:var(--orange)}
+@media (max-width:900px){.elige{text-align:center;justify-items:center}}
