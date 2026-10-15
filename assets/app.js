@@ -74,6 +74,12 @@
   $$("[data-video]").forEach(function (v) {
     var url = C[v.dataset.video];
     if (!url) return;
+    if (/\.mp4$/i.test(url)) {   // video propio: arranca sin sonido y en bucle; con controles para subirle el volumen
+      v.innerHTML = '<video src="' + encodeURI(url) + '" poster="' + encodeURI(url.replace(/\.mp4$/i, ".jpg")) + '" autoplay muted loop playsinline controls preload="metadata" style="width:100%;height:100%;border-radius:inherit;background:#000" aria-label="' + (v.getAttribute("aria-label") || "Video") + '"></video>';
+      v.style.padding = "0";
+      if (v.dataset.eventoVideo) v.querySelector("video").addEventListener("volumechange", function marca(e) { if (!e.target.muted) { palomita(v.dataset.eventoVideo); e.target.removeEventListener("volumechange", marca); } });
+      return;
+    }
     v.innerHTML = '<iframe src="' + encodeURI(url) + '" style="width:100%;height:100%;border:0;border-radius:inherit" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="' + (v.getAttribute("aria-label") || "Video") + '"></iframe>';
     v.style.padding = "0";
     if (v.dataset.eventoVideo) {
