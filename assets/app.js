@@ -99,6 +99,7 @@
       vid.addEventListener("volumechange", function () { if (!vid.muted) btnSon.hidden = true; });
       return;
     }
+    if (/youtube|youtu\.be|vimeo/.test(url) && !/autoplay=/.test(url)) url += (url.indexOf("?") < 0 ? "?" : "&") + "autoplay=1";   // que arranque solo
     v.innerHTML = '<iframe src="' + encodeURI(url) + '" style="width:100%;height:100%;border:0;border-radius:inherit" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="' + (v.getAttribute("aria-label") || "Video") + '"></iframe>';
     v.style.padding = "0";
     if (v.dataset.eventoVideo) {
