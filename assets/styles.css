@@ -189,3 +189,5 @@ nav .btn-glow{min-height:42px}
 /* Pago: aviso de a qué correo llega el acceso */
 .aviso-correo{font-size:14px;line-height:1.55;color:var(--muted);background:rgba(255,153,0,.08);border:1px solid rgba(255,153,0,.35);border-radius:12px;padding:12px 14px}
 .aviso-correo b{color:var(--fg)}
+.hero-video{display:grid;gap:12px}
+.hero-video p{font-size:13px;text-align:center}

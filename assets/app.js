@@ -61,6 +61,13 @@
     }
   }
   $$("[data-evento]").forEach(function (el) { el.addEventListener("click", function () { palomita(el.dataset.evento); }); });
+  // Después de descargar, lleva al siguiente paso (deja que la descarga arranque primero).
+  $$("[data-siguiente]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      if (el.getAttribute("aria-disabled") === "true") return;
+      setTimeout(function () { location.href = el.dataset.siguiente; }, 1500);
+    });
+  });
   $$('[data-href="WHATSAPP_URL"]').forEach(function (el) { el.addEventListener("click", function () { palomita("whatsapp"); }); });
 
   // ---- Videos ----
