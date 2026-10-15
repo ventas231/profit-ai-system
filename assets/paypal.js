@@ -28,7 +28,7 @@
     paypal.Buttons({
       style: { layout: "vertical", color: "gold", shape: "rect", label: "pay" },
       createOrder: function (d, actions) {
-        return actions.order.create({ purchase_units: [{ description: "Profit AI System · Nivel 1", amount: { currency_code: C.MONEDA, value: C.N1_MONTO } }] });
+        return actions.order.create({ purchase_units: [{ description: "Profit AI System · Nivel 1", custom_id: (window.ProfitAI && ProfitAI.correo()) || "", amount: { currency_code: C.MONEDA, value: C.N1_MONTO } }] });
       },
       onApprove: function (d, actions) { return actions.order.capture().then(function (o) { gracias(o && o.id); }); },
       onError: function () { msg("El pago no se completó y no se hizo ningún cargo. Intenta de nuevo o escríbenos por WhatsApp."); }
