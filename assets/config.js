@@ -38,8 +38,9 @@ window.CONFIG = {
   MONEDA: "USD",
 
   // ---- Videos: enlace para insertar (YouTube no listado o Vimeo) ----
-  VIDEO_DIAGNOSTICO_URL: "",   // Video 1 · Cómo correr tu diagnóstico
-  VIDEO_PRIORIDADES_URL: "",   // Video 2 · De tus prioridades a los cambios
+  VIDEO_PORTADA_URL: "assets/video/profit-ai-system-30s.mp4",   // video propio (.mp4); YouTube/Vimeo también funcionan       // Video 1 · Así se ve Profit AI System en 30 segundos (página principal)
+  VIDEO_DIAGNOSTICO_URL: "",   // Video 2 · Cómo correr tu diagnóstico
+  VIDEO_PRIORIDADES_URL: "",   // Video 3 · De tus prioridades a los cambios
 
   // ---- Descargas del diagnóstico ----
   // Un solo .zip con la skill del diagnóstico y la guía de reportes en PDF.

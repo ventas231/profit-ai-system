@@ -61,12 +61,37 @@
     }
   }
   $$("[data-evento]").forEach(function (el) { el.addEventListener("click", function () { palomita(el.dataset.evento); }); });
+  // Después de descargar, lleva al siguiente paso (deja que la descarga arranque primero).
+  $$("[data-siguiente]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      if (el.getAttribute("aria-disabled") === "true") return;
+      setTimeout(function () { location.href = el.dataset.siguiente; }, 1500);
+    });
+  });
   $$('[data-href="WHATSAPP_URL"]').forEach(function (el) { el.addEventListener("click", function () { palomita("whatsapp"); }); });
 
   // ---- Videos ----
   $$("[data-video]").forEach(function (v) {
     var url = C[v.dataset.video];
     if (!url) return;
+    if (/\.mp4$/i.test(url)) {   // video propio: arranca solo y con sonido (voz de Gerardo)
+      v.innerHTML = '<video src="' + encodeURI(url) + '" poster="' + encodeURI(url.replace(/\.mp4$/i, ".jpg")) + '" autoplay playsinline controls preload="auto" style="width:100%;height:100%;border-radius:inherit;background:#000" aria-label="' + (v.getAttribute("aria-label") || "Video") + '"></video>' +
+        '<button type="button" class="sonido" hidden>🔊 Activar sonido</button>';
+      v.style.padding = "0";
+      var vid = v.querySelector("video"), btnSon = v.querySelector(".sonido");
+      var conSonido = function () { vid.muted = false; vid.volume = 1; btnSon.hidden = true; vid.play().catch(function () {}); quitar(); };
+      var quitar = function () { ["pointerdown", "keydown", "touchstart"].forEach(function (t) { document.removeEventListener(t, conSonido, true); }); };
+      btnSon.addEventListener("click", function (e) { e.stopPropagation(); conSonido(); });
+      vid.muted = false;
+      vid.play().catch(function () {
+        // El navegador no deja arrancar con sonido sin un toque: arranca sin sonido y el primer toque en la página lo activa.
+        vid.muted = true; btnSon.hidden = false;
+        vid.play().catch(function () {});
+        ["pointerdown", "keydown", "touchstart"].forEach(function (t) { document.addEventListener(t, conSonido, true); });
+      });
+      vid.addEventListener("volumechange", function () { if (!vid.muted) btnSon.hidden = true; });
+      return;
+    }
     v.innerHTML = '<iframe src="' + encodeURI(url) + '" style="width:100%;height:100%;border:0;border-radius:inherit" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="' + (v.getAttribute("aria-label") || "Video") + '"></iframe>';
     v.style.padding = "0";
     if (v.dataset.eventoVideo) {
