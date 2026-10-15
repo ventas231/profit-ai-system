@@ -209,3 +209,54 @@ nav .btn-glow{min-height:42px}
 .video{position:relative}
 .sonido{white-space:nowrap;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;border:0;background:linear-gradient(135deg,#ffb347 0%,#ff9900 45%,#ff7a00 100%);color:var(--ink);font:800 16px var(--f-body);cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.45);animation:glow 2.2s ease-in-out infinite}
 .sonido[hidden]{display:none}
+
+/* ---- Pasos: que se note en qué página vas ---- */
+.pasos{background:linear-gradient(90deg,rgba(255,153,0,.16),rgba(255,153,0,.04));border-bottom:1px solid rgba(255,153,0,.35)}
+.pasos .wrap{display:grid;gap:8px;padding-block:12px}
+.pasos p{font:600 15px var(--f-display);color:var(--fg)}
+.pasos p b{color:var(--orange)}
+.pasos ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pasos li{display:grid;gap:5px;font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#7f8da5}
+.pasos li::before{content:"";height:6px;border-radius:99px;background:#2a3d60}
+.pasos li.ok{color:var(--muted)}
+.pasos li.ok::before{background:rgba(255,153,0,.55)}
+.pasos li.on{color:var(--orange)}
+.pasos li.on::before{background:var(--orange);box-shadow:0 0 12px rgba(255,153,0,.7)}
+/* Kit: el botón de descarga primero y grande */
+.kit-cta{display:grid;gap:10px;justify-items:center;text-align:center;background:var(--panel);border:2px solid var(--orange);border-radius:20px;padding:22px 20px;margin-bottom:28px}
+.kit-btn{max-width:520px;font-size:20px;min-height:66px}
+.kit-cta p{font-size:14px;color:var(--muted)}
+/* Niveles: los 5 agentes plegables */
+details.incluye{border-bottom:0}
+details.incluye summary{padding:0;font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
+details.incluye summary::after{top:-6px;font-size:20px}
+details.incluye ul{margin-top:10px}
+/* Celular: títulos al centro y grandes, todo más compacto, el pago primero */
+@media (max-width:900px){
+  h1{font-size:clamp(38px,10.5vw,52px)}
+  h2{font-size:clamp(30px,8.4vw,40px)}
+  .head,.hero>div:first-child{text-align:center;justify-items:center;margin-inline:auto}
+  .hero .lead,.head p{margin-inline:auto}
+  .hero .capture{margin-inline:auto}
+  .trust{justify-content:center}
+  section{padding-block:40px}
+  .hero{padding-block:28px 40px}
+  .head{margin-bottom:24px}
+  .pack{padding:20px;gap:12px}
+  .pack ul{gap:8px;font-size:14px}
+  .q{padding:18px}
+  .able article{padding-block:16px}
+  .next{margin-top:24px;padding:18px}
+  .guar{gap:16px;text-align:center;justify-items:center}
+  .seal{width:90px;height:90px}
+  .compare{margin-top:18px;padding:16px;font-size:15px}
+  .pago-orden>aside{order:-1}
+  .pasos p{text-align:center}
+}
+body{margin:0}
+@media (max-width:900px){
+  nav .btn{white-space:nowrap;font-size:13px;padding:8px 12px}
+  .brand{font-size:16px}
+  .hero .lead{font-size:17px}
+  .capture .row .btn{flex:1 1 100%}
+}
