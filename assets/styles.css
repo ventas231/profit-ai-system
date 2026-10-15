@@ -191,3 +191,7 @@ nav .btn-glow{min-height:42px}
 .aviso-correo b{color:var(--fg)}
 .hero-video{display:grid;gap:12px}
 .hero-video p{font-size:13px;text-align:center}
+.autor{display:flex;align-items:center;gap:12px;margin-top:22px}
+.autor img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid var(--orange)}
+.autor b{display:block;font:700 15px var(--f-display)}
+.autor span{display:block;font-size:13px;line-height:1.4;color:var(--muted)}
