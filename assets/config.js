@@ -9,7 +9,7 @@ window.CONFIG = {
   // deja pasar a la página de acceso sin guardar el correo.
   // En producción va en false: si no se guarda el correo, la persona ve
   // un error y el correo de contacto (nunca se pierde un lead en silencio).
-  MODO_PRUEBA: true,
+  MODO_PRUEBA: false,
 
   // ---- Contacto ----
   WHATSAPP_URL: "https://wa.me/522223288421",
