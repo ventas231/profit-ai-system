@@ -121,8 +121,8 @@ def construir():
     # ---- Qué vas a necesitar
     st += [P('ANTES DE EMPEZAR', 'eyebrow'), P('Qué vas a necesitar', 'h1'),
            P('El diagnóstico es para tiendas de <b>Amazon México</b>. '
-             'Cuatro reportes de Seller Central, tu plantilla de costos y una cuenta de Claude que permita usar skills. '
-             'Todo del <b>mismo mes calendario completo y cerrado</b>: del día 1 al último día del mes. Nunca el mes en curso.'),
+             'Cuatro reportes de Seller Central del <b>mismo mes calendario completo y cerrado</b> (del día 1 al último día; nunca el mes en curso), '
+             'las <b>transacciones del mes anterior</b>, tu plantilla de costos y una cuenta de Claude que permita usar skills.'),
            recuadro('<b>Antes de empezar:</b> te recomendamos tener Seller Central <b>en inglés</b> (arriba a la derecha, '
                     'el selector de idioma: <b>EN</b>), porque así se llaman los menús en esta guía. Revisa también, arriba a la '
                     'izquierda, que estés en <b>tu tienda</b> y en el país <b>Mexico</b>.'),
@@ -130,6 +130,7 @@ def construir():
     tabla = [[Paragraph('<b>#</b>', S['step']), Paragraph('<b>Archivo</b>', S['step']), Paragraph('<b>Para qué sirve</b>', S['step'])]] + [
         [Paragraph(a, S['step']), Paragraph(b, S['step']), Paragraph(c, S['step'])] for a, b, c in [
         ('1', '<b>Transaction</b> (Transacciones) · CSV', 'El más importante: ventas, comisión, FBA, devoluciones, impuestos y cargos.'),
+        ('1B', '<b>Transaction del mes anterior</b> · CSV', 'El mismo reporte 1, pero del mes anterior. Sirve para confirmar el ISR que Amazon cobra en el mes.'),
         ('2', '<b>Business Report</b> · By Child Item', 'Sesiones y unidades, para ver conversión.'),
         ('3', '<b>Bulk Operations</b> (publicidad) · .xlsx', 'Gasto y ventas por anuncios, por SKU.'),
         ('4', '<b>Fee Preview</b>', 'Nombres, ASIN y SKU para unir todo.'),
@@ -154,6 +155,8 @@ def construir():
                   'Dale <b>Request Report</b> (Solicitar reporte).',
                   'Cuando el <b>Status</b> diga <b>Ready</b>, dale <b>Download CSV</b>. Si dice In Progress, espera y dale Refresh.']),
            Captura('02-transacciones-filtros.png', 'Report Type: Transaction · Month · Request Report · Download CSV')]),
+           recuadro('<b>Descárgalo dos veces:</b> una con el <b>mes cerrado</b> que vas a analizar y otra con el <b>mes anterior</b> '
+                    '(por ejemplo, septiembre y agosto). El del mes anterior sirve para confirmar el ISR que Amazon cobra en el mes.'),
            PageBreak()]
 
     # ---- 2 Business Report
