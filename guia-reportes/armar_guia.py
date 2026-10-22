@@ -120,15 +120,17 @@ def construir():
 
     # ---- Qué vas a necesitar
     st += [P('ANTES DE EMPEZAR', 'eyebrow'), P('Qué vas a necesitar', 'h1'),
-           P('Cuatro reportes de Seller Central, tu plantilla de costos y una cuenta de Claude que permita usar skills. '
-             'Todo del <b>mismo mes calendario completo y cerrado</b>: del día 1 al último día del mes. Nunca el mes en curso.'),
+           P('El diagnóstico es para tiendas de <b>Amazon México</b>. '
+             'Cuatro reportes de Seller Central del <b>mismo mes calendario completo y cerrado</b> (del día 1 al último día; nunca el mes en curso), '
+             'las <b>transacciones del mes anterior</b>, tu plantilla de costos y una cuenta de Claude que permita usar skills.'),
            recuadro('<b>Antes de empezar:</b> te recomendamos tener Seller Central <b>en inglés</b> (arriba a la derecha, '
                     'el selector de idioma: <b>EN</b>), porque así se llaman los menús en esta guía. Revisa también, arriba a la '
-                    'izquierda, que estés en <b>tu tienda</b> y en el <b>país</b> correcto (por ejemplo, Mexico).'),
+                    'izquierda, que estés en <b>tu tienda</b> y en el país <b>Mexico</b>.'),
            Spacer(1, 8)]
     tabla = [[Paragraph('<b>#</b>', S['step']), Paragraph('<b>Archivo</b>', S['step']), Paragraph('<b>Para qué sirve</b>', S['step'])]] + [
         [Paragraph(a, S['step']), Paragraph(b, S['step']), Paragraph(c, S['step'])] for a, b, c in [
         ('1', '<b>Transaction</b> (Transacciones) · CSV', 'El más importante: ventas, comisión, FBA, devoluciones, impuestos y cargos.'),
+        ('1B', '<b>Transaction del mes anterior</b> · CSV', 'El mismo reporte 1, pero del mes anterior. Sirve para confirmar el ISR que Amazon cobra en el mes.'),
         ('2', '<b>Business Report</b> · By Child Item', 'Sesiones y unidades, para ver conversión.'),
         ('3', '<b>Bulk Operations</b> (publicidad) · .xlsx', 'Gasto y ventas por anuncios, por SKU.'),
         ('4', '<b>Fee Preview</b>', 'Nombres, ASIN y SKU para unir todo.'),
@@ -153,6 +155,8 @@ def construir():
                   'Dale <b>Request Report</b> (Solicitar reporte).',
                   'Cuando el <b>Status</b> diga <b>Ready</b>, dale <b>Download CSV</b>. Si dice In Progress, espera y dale Refresh.']),
            Captura('02-transacciones-filtros.png', 'Report Type: Transaction · Month · Request Report · Download CSV')]),
+           recuadro('<b>Descárgalo dos veces:</b> una con el <b>mes cerrado</b> que vas a analizar y otra con el <b>mes anterior</b> '
+                    '(por ejemplo, septiembre y agosto). El del mes anterior sirve para confirmar el ISR que Amazon cobra en el mes.'),
            PageBreak()]
 
     # ---- 2 Business Report
@@ -175,7 +179,7 @@ def construir():
            P('Gasto y ventas de tus anuncios por SKU. Con él salen tu ACOS y tu TACOS.'),
            recuadro('<b>Ojo:</b> este reporte <b>no</b> está en Seller Central. Se descarga en tu <b>consola de publicidad</b> '
                     '(Amazon Ads, se abre en otra ventana con la dirección <b>advertising.amazon...</b>). '
-                    'Revisa arriba que sea tu cuenta y el país correcto (por ejemplo, <b>Mexico</b>).'),
+                    'Revisa arriba que sea tu cuenta y el país <b>Mexico</b>.'),
            Spacer(1, 6),
            P('<b>A · Entra a tu consola de publicidad</b>', 'p'),
            pasos(['En Seller Central abre el menú (☰) › <b>Advertising</b> (Publicidad) › <b>Campaign Manager</b>. '
@@ -184,7 +188,7 @@ def construir():
            Captura('04a-bulk-menu.png', 'Consola de publicidad › Bulk operations', maxh=80*mm),
            PageBreak(),
            KeepTogether([P('<b>B · Pide el archivo</b>', 'p'),
-           pasos(['Revisa que el país sea el de tu tienda (por ejemplo, <b>Mexico</b>).',
+           pasos(['Revisa que el país sea <b>Mexico</b>.',
                   'Dale <b>Download campaigns</b> (Descargar campañas).']),
            Captura('04b-bulk-download.png', 'País · Download campaigns', maxh=80*mm)]),
            KeepTogether([P('<b>C · Elige fechas y datos</b>', 'p'),
