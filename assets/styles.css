@@ -223,9 +223,9 @@ nav .btn-glow{min-height:42px}
 .pasos li.on{color:var(--orange)}
 .pasos li.on::before{background:var(--orange);box-shadow:0 0 12px rgba(255,153,0,.7)}
 /* Kit: el botón de descarga primero y grande */
-.kit-cta{display:grid;gap:10px;justify-items:center;text-align:center;background:var(--panel);border:2px solid var(--orange);border-radius:20px;padding:22px 20px;margin-bottom:28px}
-.kit-btn{max-width:520px;font-size:20px;min-height:66px}
-.kit-cta p{font-size:14px;color:var(--muted)}
+.kit-cta{display:grid;gap:8px;justify-items:center;text-align:center;background:var(--panel);border:2px solid var(--orange);border-radius:18px;padding:16px 18px;margin:0 auto 36px;max-width:560px}
+.kit-btn{max-width:280px;font-size:16px;min-height:50px}
+.kit-cta p{font-size:13px;color:var(--muted)}
 /* Niveles: los 5 agentes plegables */
 details.incluye{border-bottom:0}
 details.incluye summary{padding:0;font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--orange)}
