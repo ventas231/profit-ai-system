@@ -35,7 +35,7 @@ const COLUMNAS = {
 // Enlaces que van en los botones del correo.
 const ACCESO = {
   LINK_CURSO: 'https://expertoventasonline.mykajabi.com/offers/nziA6H2H',   // registro al curso en Kajabi: agentes, videos y guía
-  WHATSAPP: 'https://wa.me/522223288421',   // la sesión 1 a 1 se agenda por aquí
+  WHATSAPP: 'https://wa.me/522223288421',   // dudas por WhatsApp
 };
 const NIVEL1 = { monto: '497.00', moneda: 'USD' };
 const REMITENTE = 'Profit AI System';
@@ -127,18 +127,16 @@ function enviarAcceso(email, pedido) {
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
   MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. Crea tu acceso al curso (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · Agenda tu sesión por WhatsApp: ' + ACCESO.WHATSAPP });
+    body: 'Tu acceso a Profit AI System. Crea tu acceso al curso (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
 }
 
 function armarCorreo(email, pedido) {
-  const cita = ACCESO.WHATSAPP + '?text=' + encodeURIComponent('Hola, compré Profit AI System Nivel 1 (pedido ' + pedido + ') y quiero agendar mi sesión 1 a 1.');
   return HtmlService.createHtmlOutputFromFile('Correo').getContent()
     .replace(/{{CORREO}}/g, email)
     .replace(/{{PEDIDO}}/g, pedido)
     .replace(/{{LINK_CURSO}}/g, ACCESO.LINK_CURSO || '#')
-    .replace(/{{WHATSAPP_CITA}}/g, cita)
     .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
 }
 
