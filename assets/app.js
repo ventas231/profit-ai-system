@@ -75,6 +75,18 @@
       setTimeout(function () { location.href = el.dataset.siguiente; }, 1500);
     });
   });
+  // Al descargar el kit, baja al video y lo reproduce (la descarga sigue sola).
+  $$("[data-ir-video]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      if (el.getAttribute("aria-disabled") === "true") return;
+      setTimeout(function () {
+        var destino = document.querySelector(el.dataset.irVideo);
+        if (destino) destino.scrollIntoView({ behavior: "smooth", block: "start" });
+        var vid = document.querySelector(".video video");
+        if (vid) { vid.muted = false; vid.play().catch(function () { vid.muted = true; vid.play().catch(function () {}); }); }
+      }, 600);
+    });
+  });
   $$('[data-href="WHATSAPP_URL"]').forEach(function (el) { el.addEventListener("click", function () { palomita("whatsapp"); }); });
 
   // ---- Videos ----
