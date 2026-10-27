@@ -31,9 +31,9 @@ window.CONFIG = {
   // ---- Pago con PayPal (página pago.html) ----
   // Cuenta PayPal de Estados Unidos: se cobra en dólares.
   // Opción recomendada: botón alojado de PayPal Business (el precio vive en PayPal).
-  PAYPAL_CLIENT_ID: "",            // Client ID (sandbox para pruebas, live para cobrar)
-  PAYPAL_HOSTED_BUTTON_ID: "",     // Dejar vacío: el correo automático de bienvenida necesita el botón normal (con número de pedido)
-  PAYPAL_MODO: "sandbox",          // "sandbox" o "live" (live solo con precio aprobado)
+  PAYPAL_CLIENT_ID: "BAA9lOD5qeDAuse47KusE6tyqw4q4-As1rUP5fLwLzCzZ7ja51HT-lnsJcvrhS5XgvVJaq6xjbhj9tcnTY",            // Client ID (sandbox para pruebas, live para cobrar)
+  PAYPAL_HOSTED_BUTTON_ID: "",     // Vacío: botón normal, con número de pedido para el correo automático
+  PAYPAL_MODO: "live",             // "sandbox" o "live" (live solo con precio aprobado)
   N1_MONTO: "497.00",              // usado solo si no hay botón alojado
   MONEDA: "USD",
 

@@ -34,9 +34,8 @@ const COLUMNAS = {
 // ---- Correo de bienvenida del Nivel 1 ----
 // Enlaces que van en los botones del correo.
 const ACCESO = {
-  LINK_AGENTES: '',   // descarga de los 5 agentes
-  LINK_GUIA: '',      // guía de instalación
-  WHATSAPP: 'https://wa.me/522223288421',   // la sesión 1 a 1 se agenda por aquí
+  LINK_CURSO: 'https://expertoventasonline.mykajabi.com/offers/nziA6H2H',   // registro al curso en Kajabi: agentes, videos y guía
+  WHATSAPP: 'https://wa.me/522223288421',   // dudas por WhatsApp
 };
 const NIVEL1 = { monto: '497.00', moneda: 'USD' };
 const REMITENTE = 'Profit AI System';
@@ -113,7 +112,7 @@ function enviarAcceso(email, pedido) {
   const clave = 'acceso_' + pedido;
   if (props.getProperty(clave)) return 'ya_enviado';
   if (!props.getProperty('PAYPAL_CLIENT_ID') || !props.getProperty('PAYPAL_SECRET')) return 'sin_llaves';
-  if (!ACCESO.LINK_AGENTES || !ACCESO.LINK_GUIA) return 'sin_enlaces';
+  if (!ACCESO.LINK_CURSO) return 'sin_enlaces';
 
   const orden = ordenPayPal(pedido, props);
   if (!orden) return 'error_paypal';
@@ -128,19 +127,16 @@ function enviarAcceso(email, pedido) {
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
   MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. Descarga tus agentes: ' + ACCESO.LINK_AGENTES + ' · Guía: ' + ACCESO.LINK_GUIA + ' · Agenda tu sesión por WhatsApp: ' + ACCESO.WHATSAPP });
+    body: 'Tu acceso a Profit AI System. Crea tu acceso al curso (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
 }
 
 function armarCorreo(email, pedido) {
-  const cita = ACCESO.WHATSAPP + '?text=' + encodeURIComponent('Hola, compré Profit AI System Nivel 1 (pedido ' + pedido + ') y quiero agendar mi sesión 1 a 1.');
   return HtmlService.createHtmlOutputFromFile('Correo').getContent()
     .replace(/{{CORREO}}/g, email)
     .replace(/{{PEDIDO}}/g, pedido)
-    .replace(/{{LINK_AGENTES}}/g, ACCESO.LINK_AGENTES || '#')
-    .replace(/{{LINK_GUIA}}/g, ACCESO.LINK_GUIA || '#')
-    .replace(/{{WHATSAPP_CITA}}/g, cita)
+    .replace(/{{LINK_CURSO}}/g, ACCESO.LINK_CURSO || '#')
     .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
 }
 
