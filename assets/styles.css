@@ -276,3 +276,8 @@ h1,h2{text-wrap:wrap}
 
 /* Títulos más a la orilla en celular */
 @media (max-width:900px){.head h1,.head h2{margin-inline:-8px;letter-spacing:-.03em}}
+
+/* Nota chiquita de "tu kit va en camino" (página 2) */
+.kit-nota{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--orange);text-align:center;margin:0;line-height:1.6}
+.kit-nota span{color:var(--muted);text-transform:none;letter-spacing:0}
+@media (max-width:900px){.video-grande{margin-inline:-14px;width:calc(100% + 28px);max-width:none;border-radius:0;border-inline:0}}

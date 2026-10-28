@@ -57,7 +57,7 @@
 
   // ---- Pago: muestra a qué correo le llega su acceso ----
   var destino = document.getElementById("correo-destino");
-  if (destino && correo()) destino.textContent = "a " + correo() + ", el correo que pusiste al registrarte";
+  if (destino && correo()) destino.textContent = destino.closest(".kit-nota") ? "a " + correo() : "a " + correo() + ", el correo que pusiste al registrarte";
 
   // ---- Eventos de cada página ----
   if (pagina === "sistema") {
