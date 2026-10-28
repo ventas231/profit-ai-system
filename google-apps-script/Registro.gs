@@ -6,6 +6,7 @@
  *   CORREO | DÍA Y HORA | DESCARGO LA SKILL | CHECK OUT
  * Columnas opcionales: si las agregas en la fila 1, también se llenan solas:
  *   VIO NIVELES | WHATSAPP | VIO VIDEO | PAGÓ | AGENDÓ CITA | ACCESO ENVIADO | ORIGEN
+ * KIT ENVIADO se agrega sola: palomita cuando se le mandó el correo con el kit.
  * VISITAS y ÚLTIMA VISITA se agregan solas al final de la fila 1 si no existen:
  *   cuentan cuántas veces entró cada correo (al registrarse y cada vez que regresa).
  * Pestaña HISTORIAL (se crea sola): una fila por cada cosa que hace cada correo, con fecha y hora.
@@ -37,6 +38,15 @@ const ACCESO = {
   LINK_CURSO: 'https://expertoventasonline.mykajabi.com/offers/nziA6H2H',   // registro al curso en Kajabi: agentes, videos y guía
   WHATSAPP: 'https://wa.me/522223288421',   // dudas por WhatsApp
 };
+// ---- Correo con el kit de diagnóstico ----
+// Se manda una sola vez por correo, la primera vez que alguien se registra.
+const KIT = {
+  LINK_VIDEO: '',   // video de cómo usar el agente (YouTube no listado). Sin este enlace el correo no se manda.
+  LINK_AGENTE: 'https://profitaisystem.gerardovilla.mx/descargas/agente-diagnostico-rentabilidad.zip',
+  LINK_GUIA: 'https://profitaisystem.gerardovilla.mx/descargas/guia-de-reportes-profit-ai-system.pdf',
+  LINK_EXCEL: 'https://profitaisystem.gerardovilla.mx/descargas/plantilla-de-costos-profit-ai-system.xlsx',
+  LINK_SIGUIENTE: 'https://profitaisystem.gerardovilla.mx/acceso.html#vsl',
+};
 const NIVEL1 = { monto: '497.00', moneda: 'USD' };
 const REMITENTE = 'Profit AI System';
 // El correo sale de la cuenta que instala este script (Ejecutar como: Yo).
@@ -57,7 +67,7 @@ function doPost(e) {
 
     const libro = SpreadsheetApp.getActiveSpreadsheet();
     const hoja = libro.getSheets()[0];
-    asegurarColumnas(hoja, ['VISITAS', 'ÚLTIMA VISITA']);
+    asegurarColumnas(hoja, ['VISITAS', 'ÚLTIMA VISITA', 'KIT ENVIADO']);
     const enc = hoja.getRange(1, 1, 1, hoja.getLastColumn()).getValues()[0].map(normaliza);
     const col = (nombre) => enc.indexOf(normaliza(nombre)) + 1;
     const cCorreo = col('CORREO');
@@ -80,6 +90,10 @@ function doPost(e) {
       const cVis = col('VISITAS');
       if (cVis) { const c = hoja.getRange(fila, cVis); c.setValue((Number(c.getValue()) || 0) + 1); }
       if (col('ULTIMA VISITA')) hoja.getRange(fila, col('ULTIMA VISITA')).setValue(ahora);
+    }
+    if (d.accion === 'registro') {
+      const kit = enviarKit(email);
+      if (kit === 'enviado' && col('KIT ENVIADO')) hoja.getRange(fila, col('KIT ENVIADO')).setValue('✔').setNote(ahora);
     }
 
     if (d.accion === 'evento' && COLUMNAS[d.evento] && col(COLUMNAS[d.evento])) {
@@ -130,6 +144,31 @@ function enviarAcceso(email, pedido) {
     body: 'Tu acceso a Profit AI System. Crea tu acceso al curso (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
+}
+
+// Manda el kit por correo una sola vez por persona. Devuelve: enviado | ya_enviado | sin_video
+function enviarKit(email) {
+  const props = PropertiesService.getScriptProperties();
+  const clave = 'kit_' + email;
+  if (props.getProperty(clave)) return 'ya_enviado';
+  if (!KIT.LINK_VIDEO) return 'sin_video';
+  MailApp.sendEmail({ to: email, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu kit de diagnóstico · Profit AI System', htmlBody: armarKit(),
+    body: 'Tu kit de diagnóstico. Video: ' + KIT.LINK_VIDEO + ' · Agente: ' + KIT.LINK_AGENTE + ' · Guía: ' + KIT.LINK_GUIA + ' · Plantilla: ' + KIT.LINK_EXCEL + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
+  props.setProperty(clave, new Date().toISOString());
+  return 'enviado';
+}
+
+function armarKit() {
+  let html = HtmlService.createHtmlOutputFromFile('Kit').getContent();
+  Object.keys(KIT).forEach(function (k) { html = html.replace(new RegExp('{{' + k + '}}', 'g'), KIT[k]); });
+  return html.replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
+}
+
+// Prueba: te manda el correo del kit a ti (no queda marcado como enviado).
+function pruebaKit() {
+  const yo = Session.getActiveUser().getEmail();
+  MailApp.sendEmail({ to: yo, name: REMITENTE, subject: '[PRUEBA] Tu kit de diagnóstico · Profit AI System', htmlBody: armarKit() });
+  Logger.log('Correo del kit enviado a ' + yo);
 }
 
 function armarCorreo(email, pedido) {

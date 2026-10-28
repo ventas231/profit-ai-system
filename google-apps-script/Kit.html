@@ -1,0 +1,87 @@
+<!doctype html>
+<!-- Kit.html · correo con el kit de diagnóstico. Lo manda el Apps Script (Registro.gs) la primera vez que alguien deja su correo.
+     Los textos entre {{ }} se llenan solos al enviarlo. Estilos en línea para que se vea igual en Gmail, Outlook y el celular. -->
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Tu kit de diagnóstico · Profit AI System</title>
+</head>
+<body style="margin:0;padding:0;background:#0f1b2d;">
+<div style="display:none;max-height:0;overflow:hidden;">El agente, el video de cómo usarlo, la guía de reportes y la plantilla de costos.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#0f1b2d" style="background:#0f1b2d;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;font-family:'Manrope',Arial,Helvetica,sans-serif;color:#f2f5fa;">
+
+  <!-- Marca -->
+  <tr><td style="padding:0 4px 24px;border-bottom:1px solid #24375a;">
+    <div style="font:800 20px Arial,Helvetica,sans-serif;color:#f2f5fa;">Profit AI System</div>
+    <div style="font:500 11px 'Courier New',monospace;letter-spacing:3px;color:#b3bfd2;margin-top:2px;">BY GERARDO VILLA</div>
+  </td></tr>
+
+  <!-- Bienvenida -->
+  <tr><td style="padding:32px 4px 8px;">
+    <div style="font:600 12px 'Courier New',monospace;letter-spacing:3px;color:#ff9900;">TU KIT DE DIAGNÓSTICO</div>
+    <h1 style="margin:12px 0 0;font:800 30px/1.15 Arial,Helvetica,sans-serif;color:#f2f5fa;">Descubre cuánto te deja <span style="color:#ff9900;">cada producto.</span></h1>
+    <p style="margin:16px 0 0;font-size:16px;line-height:1.6;color:#b3bfd2;">Aquí está todo para correr tu Diagnóstico de Rentabilidad. Guarda este correo para tenerlo a la mano.</p>
+  </td></tr>
+
+  <!-- 1 · Video -->
+  <tr><td style="padding:20px 0 0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#1a2a44" style="background:#1a2a44;border:2px solid #ff9900;border-radius:16px;">
+    <tr><td style="padding:24px;">
+      <div style="font:600 12px 'Courier New',monospace;letter-spacing:2px;color:#ff9900;">EMPIEZA AQUÍ</div>
+      <div style="font:800 20px Arial,Helvetica,sans-serif;color:#f2f5fa;margin-top:6px;">Mira el video de cómo usarlo</div>
+      <p style="margin:8px 0 16px;font-size:14px;line-height:1.6;color:#b3bfd2;">Gerardo te explica paso a paso cómo instalar el agente y correr tu diagnóstico.</p>
+      <a href="{{LINK_VIDEO}}" style="display:inline-block;background:#ff9900;color:#0f1b2d;font:800 16px Arial,Helvetica,sans-serif;text-decoration:none;padding:14px 28px;border-radius:999px;">▶ Ver el video</a>
+    </td></tr></table>
+  </td></tr>
+
+  <!-- 2 · Archivos -->
+  <tr><td style="padding:16px 0 0;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#152338" style="background:#152338;border:1px solid #24375a;border-radius:16px;">
+    <tr><td style="padding:24px;">
+      <div style="font:600 12px 'Courier New',monospace;letter-spacing:2px;color:#ff9900;">TUS ARCHIVOS</div>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:12px;">
+        <tr><td style="padding:12px 0;border-top:1px solid #24375a;">
+          <div style="font:800 16px Arial,Helvetica,sans-serif;color:#f2f5fa;">El agente de Diagnóstico de Rentabilidad</div>
+          <div style="font-size:13px;line-height:1.5;color:#b3bfd2;margin:4px 0 10px;">Se instala en tu cuenta de Claude.</div>
+          <a href="{{LINK_AGENTE}}" style="font:800 14px Arial,Helvetica,sans-serif;color:#ff9900;">⬇ Descargar el agente</a>
+        </td></tr>
+        <tr><td style="padding:12px 0;border-top:1px solid #24375a;">
+          <div style="font:800 16px Arial,Helvetica,sans-serif;color:#f2f5fa;">Guía de reportes (PDF)</div>
+          <div style="font-size:13px;line-height:1.5;color:#b3bfd2;margin:4px 0 10px;">Qué reportes bajar de Seller Central y cómo, con capturas.</div>
+          <a href="{{LINK_GUIA}}" style="font:800 14px Arial,Helvetica,sans-serif;color:#ff9900;">⬇ Descargar la guía</a>
+        </td></tr>
+        <tr><td style="padding:12px 0;border-top:1px solid #24375a;border-bottom:1px solid #24375a;">
+          <div style="font:800 16px Arial,Helvetica,sans-serif;color:#f2f5fa;">Plantilla de costos (Excel)</div>
+          <div style="font-size:13px;line-height:1.5;color:#b3bfd2;margin:4px 0 10px;">Llena tus costos por producto para que el diagnóstico sea exacto.</div>
+          <a href="{{LINK_EXCEL}}" style="font:800 14px Arial,Helvetica,sans-serif;color:#ff9900;">⬇ Descargar la plantilla</a>
+        </td></tr>
+      </table>
+    </td></tr></table>
+  </td></tr>
+
+  <!-- 3 · Siguiente paso -->
+  <tr><td style="padding:24px 4px 0;">
+    <p style="margin:0 0 14px;font-size:15px;line-height:1.6;color:#b3bfd2;"><b style="color:#f2f5fa;">¿Y cuando tengas tus resultados?</b> Mira cómo pasar de tu diagnóstico a más utilidad en Amazon.</p>
+    <a href="{{LINK_SIGUIENTE}}" style="display:inline-block;background:transparent;color:#f2f5fa;font:800 15px Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 24px;border-radius:999px;border:1px solid #ff9900;">Ver qué sigue</a>
+  </td></tr>
+
+  <!-- Ayuda -->
+  <tr><td style="padding:24px 4px 0;">
+    <a href="{{WHATSAPP}}" style="display:inline-block;background:#25d366;color:#06301a;font:800 15px Arial,Helvetica,sans-serif;text-decoration:none;padding:12px 24px;border-radius:999px;">¿Dudas? Escríbenos por WhatsApp</a>
+  </td></tr>
+
+  <!-- Pie -->
+  <tr><td style="padding:32px 4px 0;font-size:12px;line-height:1.6;color:#7d8aa3;">
+    © 2026 Profit AI System · Gerardo Villa · <a href="mailto:cursos@summaproducts.com" style="color:#b3bfd2;">cursos@summaproducts.com</a><br>
+    Recibiste este correo porque dejaste tu correo en profitaisystem.gerardovilla.mx.
+  </td></tr>
+
+</table>
+</td></tr>
+</table>
+</body>
+</html>
