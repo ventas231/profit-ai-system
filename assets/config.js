@@ -21,7 +21,7 @@ window.CONFIG = {
   // ---- Precios ----
   // Todo en dólares (USD).
   PRECIO_N1: "US$497",
-  PRECIO_N2: "US$2,444",
+  PRECIO_N2: "US$2,424",
 
   // ---- Hoja de Google donde se registran los correos y las palomitas ----
   // URL de la "aplicación web" de Apps Script instalada en la hoja (ver README).
