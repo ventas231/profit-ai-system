@@ -215,7 +215,7 @@ nav .btn-glow{min-height:42px}
 .pasos .wrap{display:grid;gap:8px;padding-block:12px}
 .pasos p{font:600 15px var(--f-display);color:var(--fg)}
 .pasos p b{color:var(--orange)}
-.pasos ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.pasos ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .pasos li{display:grid;gap:5px;font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:#7f8da5}
 .pasos li::before{content:"";height:6px;border-radius:99px;background:#2a3d60}
 .pasos li.ok{color:var(--muted)}
