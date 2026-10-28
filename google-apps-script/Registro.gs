@@ -161,9 +161,7 @@ function enviarKit(email) {
 function armarKit() {
   let html = HtmlService.createHtmlOutputFromFile('Kit').getContent();
   Object.keys(KIT).forEach(function (k) { html = html.replace(new RegExp('{{' + k + '}}', 'g'), KIT[k]); });
-  // Miniatura del video de YouTube con botón de play (los correos no reproducen video adentro).
-  const id = (KIT.LINK_VIDEO.match(/(?:youtu\.be\/|v=|shorts\/|embed\/)([\w-]{11})/) || [])[1];
-  const miniatura = id ? 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg' : '';
+  const miniatura = 'https://profitaisystem.gerardovilla.mx/descargas/video-kit-miniatura.jpg';   // imagen con botón de play (los correos no reproducen video adentro)
   return html.replace(/{{VIDEO_MINIATURA}}/g, miniatura).replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
 }
 
