@@ -41,7 +41,7 @@ const ACCESO = {
 // ---- Correo con el kit de diagnóstico ----
 // Se manda una sola vez por correo, la primera vez que alguien se registra.
 const KIT = {
-  LINK_VIDEO: '',   // video de cómo usar el agente (YouTube no listado). Sin este enlace el correo no se manda.
+  LINK_VIDEO: 'https://youtu.be/7TEZ_-jq7Uk',   // video de cómo usar el agente (YouTube oculto). Sin este enlace el correo no se manda.
   LINK_AGENTE: 'https://profitaisystem.gerardovilla.mx/descargas/agente-diagnostico-rentabilidad.zip',
   LINK_GUIA: 'https://profitaisystem.gerardovilla.mx/descargas/guia-de-reportes-profit-ai-system.pdf',
   LINK_EXCEL: 'https://profitaisystem.gerardovilla.mx/descargas/plantilla-de-costos-profit-ai-system.xlsx',
