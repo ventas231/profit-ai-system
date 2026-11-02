@@ -35,7 +35,7 @@ const COLUMNAS = {
 // ---- Correo de bienvenida del Nivel 1 ----
 // Enlaces que van en los botones del correo.
 const ACCESO = {
-  LINK_CURSO: 'https://cursos.gerardovilla.mx',   // plataforma de cursos (Cloudflare). Confirmar la dirección exacta cuando Gerardo dé acceso.
+  LINK_CURSO: 'https://expertoventasonline.mykajabi.com/offers/nziA6H2H',   // registro al curso en Kajabi: agentes, videos y guía
   WHATSAPP: 'https://wa.me/522223288421',   // dudas por WhatsApp
 };
 // ---- Correo con el kit de diagnóstico ----
@@ -47,7 +47,17 @@ const KIT = {
   LINK_EXCEL: 'https://profitaisystem.gerardovilla.mx/descargas/plantilla-de-costos-profit-ai-system.xlsx',
   LINK_SIGUIENTE: 'https://profitaisystem.gerardovilla.mx/acceso.html#vsl',
 };
-const NIVEL1 = { monto: '497.00', moneda: 'USD' };
+const NIVEL1 = { monto: '497.00', moneda: 'USD', curso: 'profit-ai-system' };   // curso = slug del curso en la plataforma
+// ---- Plataforma de cursos (cursos.gerardovilla.mx) ----
+// Con PLATAFORMA_URL y PLATAFORMA_SECRETO en Propiedades del script, el pago da de alta al alumno en la
+// plataforma y el correo lleva su enlace para crear contraseña. Sin esas dos propiedades sigue el enlace
+// de Kajabi (ACCESO.LINK_CURSO), como antes. El secreto es el mismo ALTA_SECRETO de la plataforma.
+// Textos del bloque "Tu acceso" del correo, según de dónde sale el enlace.
+const TEXTOS_ACCESO = {
+  kajabi: { titulo: 'Crea tu acceso al curso', texto: 'Regístrate con este mismo correo.', boton: 'Entrar a mi curso' },
+  nuevo: { titulo: 'Crea tu contraseña y entra', texto: 'Con este botón creas tu contraseña y entras a tu curso. El enlace vale 7 días y se usa una sola vez; si vence, en la página de entrada elige «Olvidé mi contraseña».', boton: 'Crear mi contraseña' },
+  existente: { titulo: 'Ya está en tu cuenta', texto: 'Entra con tu correo y la contraseña que ya tienes.', boton: 'Entrar a mi curso' },
+};
 const REMITENTE = 'Profit AI System';
 // El correo sale de la cuenta que instala este script (Ejecutar como: Yo).
 // Instálalo con cursos@summaproducts.com para que salga de ahí y quede en sus Enviados.
@@ -120,7 +130,7 @@ function doPost(e) {
 }
 
 // Confirma el pedido con PayPal y manda el correo una sola vez por pedido.
-// Devuelve: enviado | ya_enviado | sin_llaves | sin_enlaces | no_cobrado | error_paypal
+// Devuelve: enviado | ya_enviado | sin_llaves | sin_enlaces | no_cobrado | error_paypal | error_plataforma
 function enviarAcceso(email, pedido) {
   const props = PropertiesService.getScriptProperties();
   const clave = 'acceso_' + pedido;
@@ -137,13 +147,56 @@ function enviarAcceso(email, pedido) {
     && monto.value === NIVEL1.monto && monto.currency_code === NIVEL1.moneda;
   if (!cobrado) return 'no_cobrado';
 
-  const html = armarCorreo(email, pedido);
+  let acceso = { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };
+  if (props.getProperty('PLATAFORMA_URL') && props.getProperty('PLATAFORMA_SECRETO')) {
+    const alta = altaPlataforma(email, pedido, monto, props);
+    if (!alta) {                     // no se marca como enviado: el reintento o reintentarAcceso() lo vuelve a intentar
+      avisarFallo(email, pedido, props);
+      return 'error_plataforma';
+    }
+    acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
+  }
+
+  const html = armarCorreo(email, pedido, acceso);
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
   MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. Entra a la plataforma de cursos con este mismo correo (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
+    body: 'Tu acceso a Profit AI System. ' + TEXTOS_ACCESO[acceso.modo].titulo + ' (agentes, videos y guía): ' + acceso.enlace + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
+}
+
+// Da de alta al alumno en la plataforma. Devuelve { enlace, nuevo } o null si falló.
+function altaPlataforma(email, pedido, monto, props) {
+  try {
+    const r = UrlFetchApp.fetch(props.getProperty('PLATAFORMA_URL').replace(/\/$/, '') + '/api/alta', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { Authorization: 'Bearer ' + props.getProperty('PLATAFORMA_SECRETO') },
+      payload: JSON.stringify({ correo: email, pedido: pedido, curso: NIVEL1.curso, monto: monto.value || '', moneda: monto.currency_code || '' }) });
+    const j = JSON.parse(r.getContentText() || '{}');
+    if (r.getResponseCode() !== 200 || !j.ok || !j.enlace) { Logger.log('Alta falló (' + r.getResponseCode() + '): ' + (j.error || '')); return null; }
+    return { enlace: j.enlace, nuevo: !!j.nuevo };
+  } catch (err) {
+    Logger.log('Alta falló: ' + err);
+    return null;
+  }
+}
+
+// Avisa a cursos@ una sola vez por pedido que alguien pagó y no se le pudo dar acceso.
+function avisarFallo(email, pedido, props) {
+  const clave = 'fallo_' + pedido;
+  if (props.getProperty(clave)) return;
+  MailApp.sendEmail({ to: RESPONDER_A, name: REMITENTE, subject: '[REVISAR] Pago sin acceso · pedido ' + pedido,
+    body: 'El pedido ' + pedido + ' de ' + email + ' está cobrado en PayPal, pero la plataforma de cursos no lo dio de alta.\n'
+      + 'Revisa la plataforma y después, en este Apps Script, corre reintentarAcceso() con ese correo y pedido.' });
+  props.setProperty(clave, new Date().toISOString());
+}
+
+/** Reintento manual después de un aviso [REVISAR]: pon el correo y el pedido y dale Ejecutar. */
+function reintentarAcceso() {
+  const email = 'correo@ejemplo.com';   // ← correo del aviso
+  const pedido = 'PEDIDO';              // ← número de pedido del aviso
+  Logger.log(enviarAcceso(email.trim().toLowerCase(), pedido));
 }
 
 // Manda el kit por correo una sola vez por persona. Devuelve: enviado | ya_enviado | sin_video
@@ -172,11 +225,16 @@ function pruebaKit() {
   Logger.log('Correo del kit enviado a ' + yo);
 }
 
-function armarCorreo(email, pedido) {
+function armarCorreo(email, pedido, acceso) {
+  acceso = acceso || { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };
+  const t = TEXTOS_ACCESO[acceso.modo];
   return HtmlService.createHtmlOutputFromFile('Correo').getContent()
     .replace(/{{CORREO}}/g, email)
     .replace(/{{PEDIDO}}/g, pedido)
-    .replace(/{{LINK_CURSO}}/g, ACCESO.LINK_CURSO || '#')
+    .replace(/{{ACCESO_TITULO}}/g, t.titulo)
+    .replace(/{{ACCESO_TEXTO}}/g, t.texto)
+    .replace(/{{ACCESO_BOTON}}/g, t.boton)
+    .replace(/{{LINK_CURSO}}/g, acceso.enlace || '#')
     .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
 }
 
