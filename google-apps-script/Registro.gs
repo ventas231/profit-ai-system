@@ -35,7 +35,7 @@ const COLUMNAS = {
 // ---- Correo de bienvenida del Nivel 1 ----
 // Enlaces que van en los botones del correo.
 const ACCESO = {
-  LINK_CURSO: 'https://expertoventasonline.mykajabi.com/offers/nziA6H2H',   // registro al curso en Kajabi: agentes, videos y guía
+  LINK_CURSO: 'https://cursos.gerardovilla.mx',   // plataforma de cursos (Cloudflare). Confirmar la dirección exacta cuando Gerardo dé acceso.
   WHATSAPP: 'https://wa.me/522223288421',   // dudas por WhatsApp
 };
 // ---- Correo con el kit de diagnóstico ----
@@ -141,7 +141,7 @@ function enviarAcceso(email, pedido) {
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
   MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. Crea tu acceso al curso (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
+    body: 'Tu acceso a Profit AI System. Entra a la plataforma de cursos con este mismo correo (agentes, videos y guía): ' + ACCESO.LINK_CURSO + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
 }
