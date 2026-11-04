@@ -202,6 +202,22 @@ function reintentarAcceso() {
   Logger.log(enviarAcceso(email.trim().toLowerCase(), pedido));
 }
 
+/** Prueba sin PayPal: da de alta TU correo de prueba en la plataforma y te manda el correo de bienvenida.
+ *  Cambia el correo de abajo por uno tuyo (nunca de un cliente) y dale Ejecutar. */
+function pruebaAlta() {
+  const correo = 'TU_CORREO_DE_PRUEBA@gmail.com';   // ← pon aquí tu correo de prueba
+  const props = PropertiesService.getScriptProperties();
+  if (!props.getProperty('PLATAFORMA_URL') || !props.getProperty('PLATAFORMA_SECRETO')) {
+    Logger.log('FALTA: PLATAFORMA_URL o PLATAFORMA_SECRETO en Propiedades del script.'); return;
+  }
+  const pedido = 'PRUEBA-' + Date.now();
+  const alta = altaPlataforma(correo.trim().toLowerCase(), pedido, { value: '0.00', currency_code: 'USD' }, props);
+  if (!alta) { Logger.log('ERROR: la plataforma no dio de alta. Revisa la clave y la dirección (el motivo está arriba).'); return; }
+  const acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
+  MailApp.sendEmail({ to: correo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a Profit AI System · Nivel 1', htmlBody: armarCorreo(correo, pedido, acceso) });
+  Logger.log('OK: cuenta ' + (alta.nuevo ? 'nueva' : 'que ya existía') + ' en la plataforma y correo de bienvenida enviado a ' + correo);
+}
+
 // Manda el kit por correo cada vez que la persona deja su correo. Solo evita duplicados seguidos
 // (menos de 5 minutos entre uno y otro, p. ej. doble clic). Devuelve: enviado | reciente | sin_video
 function enviarKit(email) {
