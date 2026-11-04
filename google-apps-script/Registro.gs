@@ -6,7 +6,7 @@
  *   CORREO | DÍA Y HORA | DESCARGO LA SKILL | CHECK OUT
  * Columnas opcionales: si las agregas en la fila 1, también se llenan solas:
  *   VIO NIVELES | WHATSAPP | VIO VIDEO | PAGÓ | AGENDÓ CITA | ACCESO ENVIADO | ORIGEN
- * KIT ENVIADO se agrega sola: palomita cuando se le mandó el correo con el kit.
+ * KIT ENVIADO se agrega sola: palomita cuando se le mandó el correo con el kit (la nota guarda cada envío).
  * VISITAS y ÚLTIMA VISITA se agregan solas al final de la fila 1 si no existen:
  *   cuentan cuántas veces entró cada correo (al registrarse y cada vez que regresa).
  * Pestaña HISTORIAL (se crea sola): una fila por cada cosa que hace cada correo, con fecha y hora.
@@ -103,7 +103,10 @@ function doPost(e) {
     }
     if (d.accion === 'registro') {
       const kit = enviarKit(email);
-      if (kit === 'enviado' && col('KIT ENVIADO')) hoja.getRange(fila, col('KIT ENVIADO')).setValue('✔').setNote(ahora);
+      if (kit === 'enviado' && col('KIT ENVIADO')) {   // la nota guarda cada envío
+        const c = hoja.getRange(fila, col('KIT ENVIADO'));
+        c.setValue('✔').setNote([c.getNote(), ahora].filter(String).join('\n'));
+      }
     }
 
     if (d.accion === 'evento' && COLUMNAS[d.evento] && col(COLUMNAS[d.evento])) {
@@ -199,11 +202,13 @@ function reintentarAcceso() {
   Logger.log(enviarAcceso(email.trim().toLowerCase(), pedido));
 }
 
-// Manda el kit por correo una sola vez por persona. Devuelve: enviado | ya_enviado | sin_video
+// Manda el kit por correo cada vez que la persona deja su correo. Solo evita duplicados seguidos
+// (menos de 5 minutos entre uno y otro, p. ej. doble clic). Devuelve: enviado | reciente | sin_video
 function enviarKit(email) {
   const props = PropertiesService.getScriptProperties();
   const clave = 'kit_' + email;
-  if (props.getProperty(clave)) return 'ya_enviado';
+  const ultimo = Date.parse(props.getProperty(clave) || '') || 0;
+  if (Date.now() - ultimo < 5 * 60 * 1000) return 'reciente';
   if (!KIT.LINK_VIDEO) return 'sin_video';
   MailApp.sendEmail({ to: email, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu kit de diagnóstico · Profit AI System', htmlBody: armarKit(),
     body: 'Tu kit de diagnóstico. Video: ' + KIT.LINK_VIDEO + ' · Agente: ' + KIT.LINK_AGENTE + ' · Guía: ' + KIT.LINK_GUIA + ' · Plantilla: ' + KIT.LINK_EXCEL + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
