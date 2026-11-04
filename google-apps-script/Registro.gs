@@ -256,7 +256,17 @@ function armarCorreo(email, pedido, acceso) {
     .replace(/{{ACCESO_TEXTO}}/g, t.texto)
     .replace(/{{ACCESO_BOTON}}/g, t.boton)
     .replace(/{{LINK_CURSO}}/g, acceso.enlace || '#')
+    .replace(/{{ENTRAR_DESPUES}}/g, entrarDespues(acceso))
     .replace(/{{WHATSAPP}}/g, ACCESO.WHATSAPP);
+}
+
+// Recuadro "Para entrar después": la dirección fija de la plataforma, para que el alumno la guarde.
+function entrarDespues(acceso) {
+  const url = (PropertiesService.getScriptProperties().getProperty('PLATAFORMA_URL') || '').replace(/\/$/, '');
+  if (acceso.modo === 'kajabi' || !url) return '';
+  return '<div style="margin-top:18px;padding:14px 16px;background:#0f1b2d;border:1px solid #24375a;border-radius:12px;font-size:14px;line-height:1.6;color:#b3bfd2;">'
+    + '<b style="color:#f2f5fa;">Para entrar después:</b> guarda este enlace. Ahí pones tu correo y tu contraseña y entras directo a tu curso.<br>'
+    + '<a href="' + url + '" style="color:#ff9900;font-weight:800;word-break:break-all;">' + url.replace(/^https?:\/\//, '') + '</a></div>';
 }
 
 function ordenPayPal(pedido, props) {
