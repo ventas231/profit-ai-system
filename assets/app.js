@@ -57,7 +57,11 @@
 
   // ---- Pago: muestra a qué correo le llega su acceso ----
   var destino = document.getElementById("correo-destino");
-  if (destino && correo()) destino.textContent = destino.closest(".kit-nota") ? "a " + correo() : "a " + correo() + ", el correo que pusiste al registrarte";
+  if (destino && correo()) {
+    var nota = destino.closest(".kit-nota");
+    destino.textContent = nota ? "a " + correo() : "a " + correo() + ", el correo que pusiste al registrarte";
+    if (nota) nota.hidden = false;
+  }
 
   // ---- Eventos de cada página ----
   if (pagina === "sistema") {
@@ -132,7 +136,7 @@
       var btn = f.querySelector("button");
       var texto = btn.textContent;
       btn.disabled = true; btn.textContent = "Guardando…";
-      var irAcceso = function () { ls.set("correo", email); ss.set("visita", "1"); location.href = "acceso.html"; };
+      var irAcceso = function () { ls.set("correo", email); ss.set("visita", "1"); location.href = "sistema.html"; };   // mientras no esté el video VSL va directo a los niveles; con el video, regresar a "acceso.html"
       var error = function () {
         btn.disabled = false; btn.textContent = texto;
         aviso.textContent = "No pudimos registrar tu correo. Revisa tu conexión e intenta de nuevo, o escríbenos a " + C.CORREO + ".";
