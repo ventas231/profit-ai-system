@@ -48,6 +48,13 @@ Si cambias el código del Apps Script, haz **Implementar › Administrar impleme
 
 El formulario solo deja pasar a la página de acceso cuando la hoja confirma que guardó el correo. Si la hoja no responde, lo reintenta. Si vuelve a fallar, la persona ve un error y el correo de contacto. En `MODO_PRUEBA: true` deja pasar de todos modos y lo avisa en la consola.
 
+## Acceso en la plataforma de cursos después del pago
+Cuando PayPal confirma el pago del Nivel 1, el Apps Script puede dar de alta al alumno en cursos.gerardovilla.mx
+(curso `profit-ai-system`) y mandarle en el correo de bienvenida su enlace para crear contraseña (vale 7 días).
+Se prende con dos Propiedades del script: `PLATAFORMA_URL` (hoy https://cursos-gv.summaproducts.workers.dev; cuando el DNS pase a Cloudflare, https://cursos.gerardovilla.mx) y `PLATAFORMA_SECRETO`
+(el mismo `ALTA_SECRETO` de la plataforma; está en 1Password, nunca en este archivo). Sin esas dos sigue el enlace de Kajabi.
+Si la plataforma falla, no se manda el correo, llega un aviso [REVISAR] a cursos@ y se reintenta con `reintentarAcceso()`.
+
 ## Antes de salir en vivo
 - [ ] Skill gratis del diagnóstico (nombre exacto con Gerardo) + guía de reportes en PDF → un solo .zip en `descargas/` y `DESCARGA_SKILL_URL`.
 - [ ] Los 5 agentes y la guía de instalación → `LINK_AGENTES` y `LINK_GUIA` en `Registro.gs`.
