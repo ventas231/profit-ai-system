@@ -282,57 +282,93 @@ h1,h2{text-wrap:wrap}
 .kit-nota span{color:var(--muted);text-transform:none;letter-spacing:0}
 @media (max-width:900px){.video-grande{margin-inline:-14px;width:calc(100% + 28px);max-width:none;border-radius:0;border-inline:0}}
 
-/* ==== Inicio: hero corto con el correo arriba y luces (solo index.html) ==== */
-.hero2{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-areas:"text video" "strip video" "trust trust" "card card";gap:20px 48px;align-items:start;padding-block:40px 56px}
-.hero2::before{content:"";position:absolute;z-index:-1;left:-10%;top:-60px;width:min(760px,90vw);height:420px;background:radial-gradient(closest-side,rgba(255,153,0,.22),rgba(255,153,0,0));filter:blur(30px);pointer-events:none}
-.hero2 .h-text{grid-area:text}
-.hero2 .h-strip{grid-area:strip}
-.hero2 .h-video{grid-area:video;align-self:center}
-.hero2 .h-trust{grid-area:trust}
-.hero2 .h-card{grid-area:card;max-width:760px;width:100%;justify-self:center}
-.hero2 h1{font-size:clamp(30px,4.2vw,52px);line-height:1.08;margin-top:14px;letter-spacing:-.03em}
-.hero2 h1 em{background:linear-gradient(100deg,#ff9900 0%,#ffb347 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone}
-.hero2 .lead{font-size:18px;margin-top:14px;max-width:560px}
-.hero2 .capture{margin-top:20px}
-/* Tira de Gerardo */
-.h-strip{display:flex;align-items:center;gap:16px;max-width:560px}
-.h-strip img{flex:none;width:80px;height:80px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid var(--orange);box-shadow:0 0 0 4px rgba(255,153,0,.12),0 0 28px rgba(255,153,0,.45)}
-.h-strip div{display:grid;gap:2px;font-size:14px;color:var(--muted);line-height:1.4}
-.h-strip b{font:800 17px var(--f-display);color:var(--fg)}
-.h-strip .dato{color:var(--orange);font-weight:700}
-/* Puntos de confianza en una sola fila */
-.hero2 .h-trust{justify-content:center;margin-top:4px;gap:8px 28px;font-size:13px}
-/* Campo de correo que se ilumina */
-body[data-pagina="inicio"] .capture input{transition:border-color .2s,box-shadow .2s}
-body[data-pagina="inicio"] .capture input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,153,0,.22),0 0 22px rgba(255,153,0,.35)}
-/* Botón que respira cada 2.5 s y destello al pasar el mouse */
-body[data-pagina="inicio"] .btn-glow{animation:glow 2.5s ease-in-out infinite}
+/* ==== Inicio (index.html): se entiende en 3 segundos. Todo acotado a body[data-pagina="inicio"] ==== */
+body[data-pagina="inicio"] main{overflow-x:clip}
+.ih{position:relative;isolation:isolate;padding-block:24px 48px}
+.ih::before{content:"";position:absolute;z-index:-1;left:50%;top:40px;width:340px;height:340px;transform:translateX(-50%);border-radius:50%;background:rgba(255,153,0,.21);filter:blur(60px);pointer-events:none}
+.ih-wrap{max-width:1200px;margin-inline:auto;padding-inline:16px;display:grid;gap:22px;text-align:center}
+.ih-izq{display:grid;gap:14px;justify-items:center}
+/* Cápsula de privacidad */
+.privado{display:inline-flex;align-items:center;gap:10px;background:#ff9900;color:#0f1b2d;font:700 15px var(--f-body);line-height:1.3;padding:10px 18px;border-radius:999px;box-shadow:0 0 18px rgba(255,153,0,.55);text-align:left;max-width:100%}
+.privado svg{flex:none;width:18px;height:18px;fill:none;stroke:#0f1b2d;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.ih-kicker{font:500 11px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:#ffb347}
+.ih h1{font:800 33px/1.12 var(--f-display);color:#fff;letter-spacing:-.025em;margin:0}
+.dorado{background:linear-gradient(100deg,#ff9900 0%,#ffc45c 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone;filter:drop-shadow(0 0 14px rgba(255,153,0,.35))}
+.ih-sub{font-size:17px;line-height:1.5;color:#fff;max-width:620px}
+.ih-sub b{font-weight:800}
+.ih-sub .claro{color:#ffb347}
+/* Formulario */
+.ih-form{width:100%;max-width:640px;margin:4px 0 0}
+.ih-form .row{display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.ih-form .row .btn,.ih-form .row input{flex:none;width:100%}
+.ih-form input{flex:none;height:54px;padding:0 16px;background:#0a1422;border:1px solid #3a5280;border-radius:14px;color:#fff;font:500 17px var(--f-body);transition:border-color .2s,box-shadow .2s}
+.ih-form input::placeholder{color:#e1e7f0;opacity:.75}
+.ih-form input:focus{outline:none;border-color:#ff9900;box-shadow:0 0 0 3px rgba(255,153,0,.25),0 0 24px rgba(255,153,0,.25)}
+body[data-pagina="inicio"] .btn-glow{background:linear-gradient(135deg,#ffb347 0%,#ff9900 100%);color:#0f1b2d;animation:respira 2.5s ease-in-out infinite}
 body[data-pagina="inicio"] .btn-glow::after{animation:none;background-position:150% 0;transition:background-position .9s ease}
 body[data-pagina="inicio"] .btn-glow:hover::after{background-position:-50% 0}
-/* Tarjetas que se iluminan */
-body[data-pagina="inicio"] .q,body[data-pagina="inicio"] .able article{position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s}
-body[data-pagina="inicio"] .q::before,body[data-pagina="inicio"] .able article::before{content:"";position:absolute;top:-60px;left:-60px;width:180px;height:180px;background:radial-gradient(closest-side,rgba(255,179,71,.14),rgba(255,179,71,0));pointer-events:none}
-body[data-pagina="inicio"] .q:hover{border-color:rgba(255,153,0,.7);box-shadow:0 0 0 1px rgba(255,153,0,.25),0 10px 30px rgba(255,153,0,.12)}
-body[data-pagina="inicio"] .able article:hover{border-top-color:var(--orange);box-shadow:0 -1px 0 0 var(--orange),0 -10px 24px -18px rgba(255,153,0,.6)}
-/* Que las luces nunca hagan scroll de lado */
-body[data-pagina="inicio"] main{overflow-x:clip}
-/* Manchas de luz tenues en el fondo */
-body[data-pagina="inicio"] main>section{position:relative;isolation:isolate}
-body[data-pagina="inicio"] main>section::before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(420px 260px at 88% 12%,rgba(255,153,0,.07),transparent 70%),radial-gradient(360px 240px at 8% 92%,rgba(255,179,71,.05),transparent 70%)}
-/* Celular */
-@media (max-width:900px){
-  .hero2{grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "strip" "video" "trust" "card";gap:18px;padding-block:16px 36px;text-align:center}
-  .hero2::before{left:0;top:-40px;width:100%;height:340px}
-  .hero2 .eyebrow{font-size:11px;letter-spacing:.1em}
-  .hero2 h1{font-size:clamp(30px,8.4vw,34px);margin-top:10px;margin-inline:0}
-  .hero2 .lead{font-size:16px;line-height:1.5;margin-top:10px}
-  .hero2 .capture{margin-top:14px}
-  .h-strip{justify-content:center;text-align:left;margin-inline:auto}
-  .h-strip img{width:64px;height:64px}
-  .h-strip b{font-size:16px}
-  .h-strip div{font-size:13px}
+.ih-form .btn-glow{height:58px;min-height:58px;border-radius:14px;font:800 18px var(--f-display);width:100%}
+@keyframes respira{0%,100%{box-shadow:0 8px 28px rgba(255,153,0,.35)}50%{box-shadow:0 8px 44px rgba(255,153,0,.65)}}
+.ih-nota{display:none;font-size:15px;color:#fff;line-height:1.5}
+.ih-nota b{font-weight:800}
+/* Gerardo (una sola vez) */
+.ih-gerardo{display:flex;align-items:center;gap:14px;text-align:left;margin-top:6px}
+.ih-gerardo img{flex:none;width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid #ff9900;box-shadow:0 0 0 4px rgba(255,153,0,.15),0 0 28px rgba(255,153,0,.55)}
+.ih-gerardo div{display:grid;gap:2px;line-height:1.35}
+.ih-gerardo b{font:800 17px var(--f-display);color:#fff}
+.ih-gerardo span{font-size:14px;color:#e1e7f0}
+.ih-gerardo .dato{font-weight:800;color:#ffb347}
+/* Video */
+.ih-video .video{border-radius:18px;box-shadow:0 0 36px rgba(255,153,0,.18);overflow:hidden}
+/* Tu diagnóstico te contesta */
+.ih-contesta{background:#152338;border:1px solid #2c4470;border-radius:18px;padding:20px 18px;text-align:left}
+.ih-contesta h2{font:800 20px var(--f-display);color:#fff;margin:0 0 12px}
+.ih-contesta ul{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.ih-contesta li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;align-items:start;font-size:16px;line-height:1.45;color:#e1e7f0}
+.ih-contesta li b{color:#fff;font-weight:800}
+.ih-contesta li i{width:28px;height:28px;border-radius:50%;background:#ff9900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 14px rgba(255,153,0,.45)}
+.ih-contesta li i svg{width:16px;height:16px;fill:none;stroke:#0f1b2d;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+/* Preguntas y cierre */
+.ih-faq{position:relative;isolation:isolate}
+.ih-faq::before{content:"";position:absolute;z-index:-1;right:-80px;top:10%;width:320px;height:320px;border-radius:50%;background:rgba(255,153,0,.10);filter:blur(70px);pointer-events:none}
+.ih-faq summary{color:#fff}
+.ih-faq details p{color:#e1e7f0;font-size:15px}
+.ih-cierre-sec{position:relative;isolation:isolate;padding-top:8px}
+.ih-cierre-sec::before{content:"";position:absolute;z-index:-1;left:-60px;bottom:10%;width:320px;height:320px;border-radius:50%;background:rgba(255,196,92,.10);filter:blur(70px);pointer-events:none}
+.ih-cierre{max-width:860px;margin-inline:auto;background:#152338;border:1px solid #3a5280;border-radius:22px;padding:28px 18px;display:grid;gap:16px;justify-items:center;text-align:center;box-shadow:0 0 50px rgba(255,153,0,.12)}
+.gratis{background:#ff9900;color:#0f1b2d;font:600 12px var(--f-mono);letter-spacing:.14em;text-transform:uppercase;padding:6px 14px;border-radius:999px;box-shadow:0 0 16px rgba(255,153,0,.5)}
+.ih-cierre h2{font:800 28px/1.12 var(--f-display);color:#fff;letter-spacing:-.02em}
+.ih-nota2{font-size:15px;color:#e1e7f0}
+/* Computadora */
+@media (min-width:768px){
+  .ih{padding-block:48px 72px}
+  .ih::before{left:28%;top:20px;width:560px;height:440px;filter:blur(80px);background:rgba(255,153,0,.22)}
+  .ih-wrap{padding-inline:24px;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);grid-template-areas:"izq video" "contesta contesta";gap:28px 48px;text-align:left;align-items:center}
+  .ih-izq{grid-area:izq;justify-items:start}
+  .ih-video{grid-area:video}
+  .ih-contesta{grid-area:contesta;background:none;border:0;padding:0;text-align:center;margin-top:12px}
+  .privado{font-size:17px;white-space:nowrap}
+  .ih-kicker{font-size:13px}
+  .ih h1{font-size:50px;line-height:1.08}
+  .ih-sub{font-size:19px}
+  .ih-form .row{grid-template-columns:minmax(0,1fr) auto}
+  .ih-form .row .btn{width:auto}
+  .ih-form .btn-glow{width:auto;padding-inline:26px}
+  .ih-nota{display:block;max-width:600px}
+  .ih-gerardo{border-top:1px solid #24375a;padding-top:16px;margin-top:4px;width:100%}
+  .ih-gerardo img{width:76px;height:76px}
+  .ih-video .video{aspect-ratio:16/10;border-radius:22px;box-shadow:0 0 60px rgba(255,153,0,.22)}
+  .ih-contesta h2{font-size:26px;margin-bottom:18px}
+  .ih-contesta ul{grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;text-align:left}
+  .ih-contesta li{background:#152338;border:1px solid #2c4470;border-radius:18px;padding:20px;transition:border-color .25s,box-shadow .25s}
+  .ih-contesta li:hover{border-color:#ff9900;box-shadow:0 0 24px rgba(255,153,0,.2)}
+  .ih-cierre{padding:40px 32px}
+  .ih-cierre h2{font-size:38px}
+}
+@media (max-width:767px){
+  body[data-pagina="inicio"] .head{text-align:center}
 }
 @media (prefers-reduced-motion:reduce){
   body[data-pagina="inicio"] .btn-glow,body[data-pagina="inicio"] .btn-glow::after{animation:none;transition:none}
-  body[data-pagina="inicio"] .capture input,body[data-pagina="inicio"] .q,body[data-pagina="inicio"] .able article{transition:none}
+  .ih-form input,.ih-contesta li{transition:none}
 }
