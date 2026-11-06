@@ -281,3 +281,58 @@ h1,h2{text-wrap:wrap}
 .kit-nota{font:500 11px var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--orange);text-align:center;margin:0;line-height:1.6}
 .kit-nota span{color:var(--muted);text-transform:none;letter-spacing:0}
 @media (max-width:900px){.video-grande{margin-inline:-14px;width:calc(100% + 28px);max-width:none;border-radius:0;border-inline:0}}
+
+/* ==== Inicio: hero corto con el correo arriba y luces (solo index.html) ==== */
+.hero2{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);grid-template-areas:"text video" "strip video" "trust trust" "card card";gap:20px 48px;align-items:start;padding-block:40px 56px}
+.hero2::before{content:"";position:absolute;z-index:-1;left:-10%;top:-60px;width:min(760px,90vw);height:420px;background:radial-gradient(closest-side,rgba(255,153,0,.22),rgba(255,153,0,0));filter:blur(30px);pointer-events:none}
+.hero2 .h-text{grid-area:text}
+.hero2 .h-strip{grid-area:strip}
+.hero2 .h-video{grid-area:video;align-self:center}
+.hero2 .h-trust{grid-area:trust}
+.hero2 .h-card{grid-area:card;max-width:760px;width:100%;justify-self:center}
+.hero2 h1{font-size:clamp(30px,4.2vw,52px);line-height:1.08;margin-top:14px;letter-spacing:-.03em}
+.hero2 h1 em{background:linear-gradient(100deg,#ff9900 0%,#ffb347 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hero2 .lead{font-size:18px;margin-top:14px;max-width:560px}
+.hero2 .capture{margin-top:20px}
+/* Tira de Gerardo */
+.h-strip{display:flex;align-items:center;gap:16px;max-width:560px}
+.h-strip img{flex:none;width:80px;height:80px;border-radius:50%;object-fit:cover;object-position:center 20%;border:2px solid var(--orange);box-shadow:0 0 0 4px rgba(255,153,0,.12),0 0 28px rgba(255,153,0,.45)}
+.h-strip div{display:grid;gap:2px;font-size:14px;color:var(--muted);line-height:1.4}
+.h-strip b{font:800 17px var(--f-display);color:var(--fg)}
+.h-strip .dato{color:var(--orange);font-weight:700}
+/* Puntos de confianza en una sola fila */
+.hero2 .h-trust{justify-content:center;margin-top:4px;gap:8px 28px;font-size:13px}
+/* Campo de correo que se ilumina */
+body[data-pagina="inicio"] .capture input{transition:border-color .2s,box-shadow .2s}
+body[data-pagina="inicio"] .capture input:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,153,0,.22),0 0 22px rgba(255,153,0,.35)}
+/* Botón que respira cada 2.5 s y destello al pasar el mouse */
+body[data-pagina="inicio"] .btn-glow{animation:glow 2.5s ease-in-out infinite}
+body[data-pagina="inicio"] .btn-glow::after{animation:none;background-position:150% 0;transition:background-position .9s ease}
+body[data-pagina="inicio"] .btn-glow:hover::after{background-position:-50% 0}
+/* Tarjetas que se iluminan */
+body[data-pagina="inicio"] .q,body[data-pagina="inicio"] .able article{position:relative;overflow:hidden;transition:border-color .25s,box-shadow .25s}
+body[data-pagina="inicio"] .q::before,body[data-pagina="inicio"] .able article::before{content:"";position:absolute;top:-60px;left:-60px;width:180px;height:180px;background:radial-gradient(closest-side,rgba(255,179,71,.14),rgba(255,179,71,0));pointer-events:none}
+body[data-pagina="inicio"] .q:hover{border-color:rgba(255,153,0,.7);box-shadow:0 0 0 1px rgba(255,153,0,.25),0 10px 30px rgba(255,153,0,.12)}
+body[data-pagina="inicio"] .able article:hover{border-top-color:var(--orange);box-shadow:0 -1px 0 0 var(--orange),0 -10px 24px -18px rgba(255,153,0,.6)}
+/* Que las luces nunca hagan scroll de lado */
+body[data-pagina="inicio"] main{overflow-x:clip}
+/* Manchas de luz tenues en el fondo */
+body[data-pagina="inicio"] main>section{position:relative;isolation:isolate}
+body[data-pagina="inicio"] main>section::before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:radial-gradient(420px 260px at 88% 12%,rgba(255,153,0,.07),transparent 70%),radial-gradient(360px 240px at 8% 92%,rgba(255,179,71,.05),transparent 70%)}
+/* Celular */
+@media (max-width:900px){
+  .hero2{grid-template-columns:minmax(0,1fr);grid-template-areas:"text" "strip" "video" "trust" "card";gap:18px;padding-block:16px 36px;text-align:center}
+  .hero2::before{left:0;top:-40px;width:100%;height:340px}
+  .hero2 .eyebrow{font-size:11px;letter-spacing:.1em}
+  .hero2 h1{font-size:clamp(30px,8.4vw,34px);margin-top:10px;margin-inline:0}
+  .hero2 .lead{font-size:16px;line-height:1.5;margin-top:10px}
+  .hero2 .capture{margin-top:14px}
+  .h-strip{justify-content:center;text-align:left;margin-inline:auto}
+  .h-strip img{width:64px;height:64px}
+  .h-strip b{font-size:16px}
+  .h-strip div{font-size:13px}
+}
+@media (prefers-reduced-motion:reduce){
+  body[data-pagina="inicio"] .btn-glow,body[data-pagina="inicio"] .btn-glow::after{animation:none;transition:none}
+  body[data-pagina="inicio"] .capture input,body[data-pagina="inicio"] .q,body[data-pagina="inicio"] .able article{transition:none}
+}
