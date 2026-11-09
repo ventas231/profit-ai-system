@@ -8,10 +8,17 @@
   var correo = function () { return ls.get("correo"); };
   var pagina = document.body.dataset.pagina || "";
   // Meta Pixel: eventos de conversión (si el píxel cargó)
+  // La copia de servidor la hace "API de conversiones con Meta" y Meta ya la deduplica (100% con identificador de evento).
   var meta = function (ev, datos, opciones) { try { if (window.fbq) fbq("track", ev, datos || {}, opciones || {}); } catch (e) {} };
   if (pagina === "sistema") meta("ViewContent", { content_name: "Niveles Profit AI System" });
   if (pagina === "pago") meta("InitiateCheckout", { value: 497, currency: "USD", content_name: "Profit AI System Nivel 1" });
   if (pagina === "gracias") { var ped = new URLSearchParams(location.search).get("pedido"); if (ped) meta("Purchase", { value: 497, currency: "USD", content_name: "Profit AI System Nivel 1" }, { eventID: ped }); }
+
+  // Lead una sola vez por correo en este navegador (corrección 2026-11-09, pendiente #135):
+  // si la persona vuelve a meter el mismo correo, la hoja no crea fila nueva y Meta tampoco debe contar otro Lead.
+  // Quien se registró antes de este cambio ya tiene su correo guardado: ese Lead ya se mandó.
+  var leadYaEnviado = function (email) { return correo() === email || ("|" + ls.get("leads") + "|").indexOf("|" + email + "|") >= 0; };
+  var marcarLead = function (email) { var l = ls.get("leads"); ls.set("leads", l ? l + "|" + email : email); };
 
   // ---- UTM de la primera visita ----
   try {
@@ -141,7 +148,10 @@
       var btn = f.querySelector("button");
       var texto = btn.textContent;
       btn.disabled = true; btn.textContent = "Guardando…";
-      var irAcceso = function () { meta("Lead", { content_name: "Kit de diagnóstico" }); ls.set("correo", email); ss.set("visita", "1"); location.href = "sistema.html"; };   // mientras no esté el video VSL va directo a los niveles; con el video, regresar a "acceso.html"
+      var irAcceso = function () {
+        if (!leadYaEnviado(email)) { meta("Lead", { content_name: "Kit de diagnóstico" }); marcarLead(email); }
+        ls.set("correo", email); ss.set("visita", "1"); location.href = "sistema.html";
+      };   // mientras no esté el video VSL va directo a los niveles; con el video, regresar a "acceso.html"
       var error = function () {
         btn.disabled = false; btn.textContent = texto;
         aviso.textContent = "No pudimos registrar tu correo. Revisa tu conexión e intenta de nuevo, o escríbenos a " + C.CORREO + ".";
