@@ -95,11 +95,15 @@ section.deep{background:var(--deep)}
 .promo-sticker{position:absolute;top:-22px;right:-10px;width:92px;height:92px;border-radius:50%;background:#e3262d;color:#fff;display:grid;place-content:center;text-align:center;transform:rotate(12deg);box-shadow:0 10px 24px -8px rgba(0,0,0,.6);border:3px solid #fff;z-index:2;animation:promoSticker 3s ease-in-out infinite;pointer-events:none}
 .promo-sticker span{font:800 13px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
 .promo-sticker b{font:900 22px/1 var(--f-display)}
-.promo-sticker img{width:100%;height:100%;object-fit:contain;border-radius:50%}
-.promo-sticker:has(img){background:transparent;border:0;box-shadow:none}
+.promo-sticker img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 8px 14px rgba(0,0,0,.55))}
+.promo-sticker:has(img){background:transparent;border:0;border-radius:0;box-shadow:none;width:120px;height:120px;top:-34px;right:-14px}
+.promo-sticker .promo-sticker-pct{position:absolute;right:4px;bottom:-24px;background:#e3262d;color:#fff;border:3px solid #fff;border-radius:999px;padding:4px 9px;font:900 17px/1 var(--f-display);transform:rotate(-14deg);box-shadow:0 6px 14px -4px rgba(0,0,0,.6)}
 @keyframes promoLatido{0%{box-shadow:0 0 0 0 rgba(227,38,45,.6)}70%{box-shadow:0 0 0 12px rgba(227,38,45,0)}100%{box-shadow:0 0 0 0 rgba(227,38,45,0)}}
 @keyframes promoSticker{0%,100%{transform:rotate(12deg) scale(1)}50%{transform:rotate(6deg) scale(1.07)}}
-@media (max-width:640px){.promo-sticker{width:76px;height:76px;top:-18px;right:-6px}.promo-sticker b{font-size:18px}.promo-sticker span{font-size:11px}}
+@media (max-width:640px){.promo-sticker:has(img){width:96px;height:96px;top:-28px;right:-8px}.promo-sticker{width:76px;height:76px;top:-18px;right:-6px}.promo-sticker b{font-size:18px}.promo-sticker span{font-size:11px}}
+.pack.hl .promo-sticker .promo-sticker-pct{right:auto;left:-40px;bottom:4px}
+.pago-promo .promo-sticker:has(img){width:88px;height:88px;top:-44px;right:-10px}
+.pago-promo .promo-sticker .promo-sticker-pct{font-size:14px;bottom:-14px}
 @media (prefers-reduced-motion:reduce){.promo-pill,.promo-sticker{animation:none}}
 .compare{margin-top:28px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 24px;font-size:16px}
 

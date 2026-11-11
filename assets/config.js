@@ -41,7 +41,7 @@ window.CONFIG = {
   PROMO_N1: { nombre: "Buen Fin adelantado", descuento: "25%", precio: "US$372.75", monto: "372.75",
               inicio: "2026-11-11T00:00:00-06:00", fin: "2026-11-17T00:00:00-06:00",   // fin = primer momento SIN descuento
               cierre: "Termina el lunes 16 de noviembre",
-              logo: "" },   // imagen del sticker (ej. "assets/buen-fin.png"); vacío = sticker de texto
+              logo: "assets/buen-fin.png" },   // imagen del sticker (ej. "assets/buen-fin.png"); vacío = sticker de texto
 
   // ---- Videos: enlace para insertar (YouTube no listado o Vimeo) ----
   VIDEO_PORTADA_URL: "assets/video/profit-ai-system-30s.mp4",   // video propio (.mp4); YouTube/Vimeo también funcionan       // Video 1 · Así se ve Profit AI System en 30 segundos (página principal)

@@ -76,7 +76,7 @@
     // Sticker en la tarjeta del Nivel 1 (y en la caja de pago)
     $$(".pack.hl, .pago-promo").forEach(function (box) {
       var st = document.createElement("div"); st.className = "promo-sticker"; st.setAttribute("aria-hidden", "true");
-      st.innerHTML = P.logo ? '<img src="' + encodeURI(P.logo) + '" alt="">' : '<span>Buen<br>Fin</span><b>-' + P.descuento + '</b>';
+      st.innerHTML = P.logo ? '<img src="' + encodeURI(P.logo) + '" alt=""><b class="promo-sticker-pct">-' + P.descuento + '</b>' : '<span>Buen<br>Fin</span><b>-' + P.descuento + '</b>';
       box.appendChild(st);
     });
     var finMs = Date.parse(P.fin), dos = function (n) { return (n < 10 ? "0" : "") + n; };
