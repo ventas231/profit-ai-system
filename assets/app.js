@@ -52,7 +52,7 @@
     if (!caja) {
       caja = document.createElement("div"); caja.id = "oai-diag";
       caja.setAttribute("style", "position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#111;color:#fff;border:2px solid #f5a623;border-radius:10px;padding:12px 14px;font:14px/1.5 system-ui,sans-serif;max-height:60vh;overflow:auto");
-      caja.innerHTML = "<b>Diagnóstico ChatGPT Ads (temporal)</b><ol style='margin:6px 0 0 18px;padding:0'></ol>";
+      caja.innerHTML = "<b>Diagnóstico ChatGPT Ads (temporal)</b><ol style='margin:6px 0 0;padding:0;list-style:none'></ol>";
       document.body.appendChild(caja);
     }
     var li = document.createElement("li"); li.textContent = paso + ": " + valor;
@@ -60,10 +60,10 @@
     return caja;
   };
   if (diagActivo) {
-    diag("Píxel iniciado en esta página", window.oaiq ? "sí" : "NO");
+    diag("0. Píxel iniciado en esta página", window.oaiq ? "sí" : "NO");
     setTimeout(function () {
       var sdk = false; try { sdk = performance.getEntriesByType("resource").some(function (r) { return /oaiq\.min\.js/.test(r.name); }); } catch (e) {}
-      diag("SDK de OpenAI descargado", sdk ? "sí" : "NO (¿bloqueador?)");
+      diag("0. SDK de OpenAI descargado", sdk ? "sí" : "NO (¿bloqueador?)");
     }, 1500);
   }
   // Parámetros de atribución que viajan al siguiente paso (UTM, oppref de ChatGPT, fbclid, gclid).
