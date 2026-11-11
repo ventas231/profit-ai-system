@@ -25,6 +25,47 @@
   var oai = function () { try { if (window.oaiq) window.oaiq.apply(window, arguments); } catch (e) {} };
   var oaiYaEnviado = function (email) { return ("|" + ls.get("oai_leads") + "|").indexOf("|" + email + "|") >= 0; };
   var oaiMarcar = function (email) { var l = ls.get("oai_leads"); ls.set("oai_leads", l ? l + "|" + email : email); };
+  // Espera a que el navegador termine una solicitud a OpenAI (bzr.openai.com) iniciada después de "desde" (máx. "limite" ms).
+  // Sirve para no cambiar de página antes de que salga el evento. Devuelve true si vio la solicitud.
+  var esperarEnvioOAI = function (desde, limite, listo) {
+    var hecho = false, po = null;
+    var fin = function (visto) { if (hecho) return; hecho = true; try { if (po) po.disconnect(); } catch (e) {} listo(visto); };
+    var buscar = function (lista) {
+      for (var i = 0; i < lista.length; i++) {
+        var r = lista[i];
+        if (/^https:\/\/([a-z0-9-]+\.)*openai\.com\//.test(r.name) && !/\.js(\?|$)/.test(r.name) && r.startTime >= desde) return true;
+      }
+      return false;
+    };
+    try {
+      po = new PerformanceObserver(function (l) { if (buscar(l.getEntries())) fin(true); });
+      po.observe({ type: "resource", buffered: true });
+    } catch (e) { po = null; }
+    try { if (buscar(performance.getEntriesByType("resource"))) fin(true); } catch (e) {}
+    setTimeout(function () { try { fin(buscar(performance.getEntriesByType("resource"))); } catch (e) { fin(false); } }, limite);
+  };
+  // Diagnóstico temporal: solo con ?oai_diag=1 en la URL. Muestra los pasos en pantalla, sin el correo ni datos personales.
+  var diagActivo = /[?&]oai_diag=1(&|$)/.test(location.search);
+  var diag = function (paso, valor) {
+    if (!diagActivo) return;
+    var caja = document.getElementById("oai-diag");
+    if (!caja) {
+      caja = document.createElement("div"); caja.id = "oai-diag";
+      caja.setAttribute("style", "position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#111;color:#fff;border:2px solid #f5a623;border-radius:10px;padding:12px 14px;font:14px/1.5 system-ui,sans-serif;max-height:60vh;overflow:auto");
+      caja.innerHTML = "<b>Diagnóstico ChatGPT Ads (temporal)</b><ol style='margin:6px 0 0 18px;padding:0'></ol>";
+      document.body.appendChild(caja);
+    }
+    var li = document.createElement("li"); li.textContent = paso + ": " + valor;
+    caja.querySelector("ol").appendChild(li);
+    return caja;
+  };
+  if (diagActivo) {
+    diag("Píxel iniciado en esta página", window.oaiq ? "sí" : "NO");
+    setTimeout(function () {
+      var sdk = false; try { sdk = performance.getEntriesByType("resource").some(function (r) { return /oaiq\.min\.js/.test(r.name); }); } catch (e) {}
+      diag("SDK de OpenAI descargado", sdk ? "sí" : "NO (¿bloqueador?)");
+    }, 1500);
+  }
   // Parámetros de atribución que viajan al siguiente paso (UTM, oppref de ChatGPT, fbclid, gclid).
   var ATRIB = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "oppref", "fbclid", "gclid"];
   var conAtribucion = function (destino) {
@@ -169,13 +210,35 @@
       btn.disabled = true; btn.textContent = "Guardando…";
       var irAcceso = function (respuesta) {   // respuesta = lo que confirmó la hoja; vacío si no se guardó (modo prueba)
         if (!leadYaEnviado(email)) { meta("Lead", { content_name: "Kit de diagnóstico" }); marcarLead(email); }
-        var midio = false;
-        if (respuesta && respuesta.ok && respuesta.nuevo !== false && !oaiYaEnviado(email)) {
+        var guardado = !!(respuesta && respuesta.ok);
+        diag("1. Guardado confirmado por la hoja", guardado ? "sí" : "no");
+        diag("2. Registro", !respuesta ? "—" : respuesta.nuevo === true ? "nuevo" : respuesta.nuevo === false ? "existente (no se mide)" : "la hoja no lo indica");
+        var yaMedido = oaiYaEnviado(email);
+        diag("3. Protección contra duplicados", yaMedido ? "bloqueó: este correo ya se midió en este navegador" : "no bloqueó");
+        var midio = false, antes = 0;
+        if (guardado && respuesta.nuevo !== false && !yaMedido) {
+          try { antes = performance.now(); } catch (e) {}
           oai("measure", "lead_created", { type: "customer_action" }); oaiMarcar(email); midio = true;
         }
+        diag("4. Llamada a lead_created ejecutada", midio ? (window.oaiq ? "sí" : "no: el píxel no existe en la página") : "no");
         ls.set("correo", email); ss.set("visita", "1");
-        var ir = function () { location.href = conAtribucion("sistema.html"); };
-        if (midio) setTimeout(ir, 400); else ir();   // un respiro para que salga el evento; el correo ya está guardado
+        var destinoUrl = conAtribucion("sistema.html");
+        var ir = function () {
+          if (!diagActivo) { location.href = destinoUrl; return; }
+          var caja = diag("6. Redirección", "en pausa para leer el diagnóstico");
+          var b = document.createElement("button"); b.type = "button"; b.textContent = "Continuar a sistema.html";
+          b.setAttribute("style", "margin-top:8px;padding:8px 14px;border-radius:8px;border:0;background:#f5a623;color:#111;font-weight:700;cursor:pointer");
+          b.addEventListener("click", function () { location.href = destinoUrl; });
+          caja.appendChild(b);
+        };
+        if (!midio) { ir(); return; }
+        // No cambiar de página hasta que el navegador termine de mandar la solicitud a OpenAI (máx. 4 s).
+        // Antes se esperaban 0.4 s fijos: si el píxel junta eventos y los manda después, el cambio de página los perdía.
+        esperarEnvioOAI(antes, 4000, function (visto) {
+          diag("5. Solicitud del navegador a OpenAI tras la llamada", visto ? "salió y terminó (en Network debe verse con 202)" : "no se vio en 4 s");
+          diag("Nota", "\"salió\" no es lo mismo que \"OpenAI lo registró\": eso solo lo confirma el gestor de ChatGPT Ads");
+          ir();
+        });
       };   // mientras no esté el video VSL va directo a los niveles; con el video, regresar a "acceso.html"
       var error = function () {
         enviando = false;
