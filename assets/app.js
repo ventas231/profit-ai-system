@@ -7,12 +7,18 @@
   };
   var correo = function () { return ls.get("correo"); };
   var pagina = document.body.dataset.pagina || "";
+  // ---- Promocion del Nivel 1 (config.js, PROMO_N1): solo entre inicio y fin ----
+  var P = C.PROMO_N1, ahoraMs = Date.now();
+  var promo = !!(P && P.monto && ahoraMs >= Date.parse(P.inicio) && ahoraMs < Date.parse(P.fin));
+  var precioLista = C.PRECIO_N1;
+  if (promo) { C.PRECIO_N1 = P.precio; C.N1_MONTO = P.monto; }   // paypal.js lee N1_MONTO despues de este archivo
+  var valorN1 = parseFloat(C.N1_MONTO) || 497;
   // Meta Pixel: eventos de conversión (si el píxel cargó)
   // La copia de servidor la hace "API de conversiones con Meta" y Meta ya la deduplica (100% con identificador de evento).
   var meta = function (ev, datos, opciones) { try { if (window.fbq) fbq("track", ev, datos || {}, opciones || {}); } catch (e) {} };
   if (pagina === "sistema") meta("ViewContent", { content_name: "Niveles Profit AI System" });
-  if (pagina === "pago") meta("InitiateCheckout", { value: 497, currency: "USD", content_name: "Profit AI System Nivel 1" });
-  if (pagina === "gracias") { var ped = new URLSearchParams(location.search).get("pedido"); if (ped) meta("Purchase", { value: 497, currency: "USD", content_name: "Profit AI System Nivel 1" }, { eventID: ped }); }
+  if (pagina === "pago") meta("InitiateCheckout", { value: valorN1, currency: "USD", content_name: "Profit AI System Nivel 1" });
+  if (pagina === "gracias") { var ped = new URLSearchParams(location.search).get("pedido"); if (ped) meta("Purchase", { value: valorN1, currency: "USD", content_name: "Profit AI System Nivel 1" }, { eventID: ped }); }
 
   // Lead una sola vez por correo en este navegador (corrección 2026-11-09, pendiente #135):
   // si la persona vuelve a meter el mismo correo, la hoja no crea fila nueva y Meta tampoco debe contar otro Lead.
@@ -56,6 +62,32 @@
 
   // ---- Textos y enlaces desde config.js ----
   $$("[data-cfg]").forEach(function (el) { var v = C[el.dataset.cfg]; if (v) el.textContent = v; });
+  if (promo) {
+    var cuentas = [];
+    $$('[data-cfg="PRECIO_N1"]').forEach(function (el) {
+      var tag = document.createElement("span"); tag.className = "promo-precio";
+      tag.innerHTML = '<b class="promo-pill">\ud83d\udd25 ' + P.nombre + ' \u00b7 -' + P.descuento + '</b> <s>' + precioLista + '</s>';
+      el.parentNode.insertBefore(tag, el);
+      var c = document.createElement("span"); c.className = "promo-cuenta";
+      c.innerHTML = (P.cierre || "Termina pronto") + ' \u00b7 quedan <b></b>';
+      el.parentNode.insertBefore(c, el.nextSibling);
+      cuentas.push(c.querySelector("b"));
+    });
+    // Sticker en la tarjeta del Nivel 1 (y en la caja de pago)
+    $$(".pack.hl, .pago-promo").forEach(function (box) {
+      var st = document.createElement("div"); st.className = "promo-sticker"; st.setAttribute("aria-hidden", "true");
+      st.innerHTML = P.logo ? '<img src="' + encodeURI(P.logo) + '" alt=""><b class="promo-sticker-pct">-' + P.descuento + '</b>' : '<span>Buen<br>Fin</span><b>-' + P.descuento + '</b>';
+      box.appendChild(st);
+    });
+    var finMs = Date.parse(P.fin), dos = function (n) { return (n < 10 ? "0" : "") + n; };
+    var tic = function () {
+      var r = Math.max(0, Math.floor((finMs - Date.now()) / 1000));
+      var t = Math.floor(r / 86400) + "d " + dos(Math.floor(r % 86400 / 3600)) + "h " + dos(Math.floor(r % 3600 / 60)) + "m " + dos(r % 60) + "s";
+      cuentas.forEach(function (b) { b.textContent = t; });
+      if (r === 0) location.reload();   // al terminar, la página vuelve al precio normal
+    };
+    tic(); setInterval(tic, 1000);
+  }
   $$("[data-href]").forEach(function (el) {
     var k = el.dataset.href;
     var v = k === "CORREO_MAILTO" ? "mailto:" + C.CORREO : C[k];
