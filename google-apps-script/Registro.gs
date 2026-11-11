@@ -164,7 +164,7 @@ function enviarAcceso(email, pedido) {
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
   MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. ' + TEXTOS_ACCESO[acceso.modo].titulo + ' (agentes, videos y guía): ' + acceso.enlace + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
+    body: 'Tu acceso a Profit AI System. ' + TEXTOS_ACCESO[acceso.modo].titulo + ' (tu equipo de agentes): ' + acceso.enlace + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
 }
