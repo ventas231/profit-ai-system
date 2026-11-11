@@ -62,11 +62,32 @@
 
   // ---- Textos y enlaces desde config.js ----
   $$("[data-cfg]").forEach(function (el) { var v = C[el.dataset.cfg]; if (v) el.textContent = v; });
-  if (promo) $$('[data-cfg="PRECIO_N1"]').forEach(function (el) {
-    var tag = document.createElement("span"); tag.className = "promo-precio";
-    tag.innerHTML = '<b class="pill">' + P.nombre + ' \u00b7 -' + P.descuento + '</b> <s>' + precioLista + '</s>';
-    el.parentNode.insertBefore(tag, el);
-  });
+  if (promo) {
+    var cuentas = [];
+    $$('[data-cfg="PRECIO_N1"]').forEach(function (el) {
+      var tag = document.createElement("span"); tag.className = "promo-precio";
+      tag.innerHTML = '<b class="promo-pill">\ud83d\udd25 ' + P.nombre + ' \u00b7 -' + P.descuento + '</b> <s>' + precioLista + '</s>';
+      el.parentNode.insertBefore(tag, el);
+      var c = document.createElement("span"); c.className = "promo-cuenta";
+      c.innerHTML = (P.cierre || "Termina pronto") + ' \u00b7 quedan <b></b>';
+      el.parentNode.insertBefore(c, el.nextSibling);
+      cuentas.push(c.querySelector("b"));
+    });
+    // Sticker en la tarjeta del Nivel 1 (y en la caja de pago)
+    $$(".pack.hl, .pago-promo").forEach(function (box) {
+      var st = document.createElement("div"); st.className = "promo-sticker"; st.setAttribute("aria-hidden", "true");
+      st.innerHTML = P.logo ? '<img src="' + encodeURI(P.logo) + '" alt="">' : '<span>Buen<br>Fin</span><b>-' + P.descuento + '</b>';
+      box.appendChild(st);
+    });
+    var finMs = Date.parse(P.fin), dos = function (n) { return (n < 10 ? "0" : "") + n; };
+    var tic = function () {
+      var r = Math.max(0, Math.floor((finMs - Date.now()) / 1000));
+      var t = Math.floor(r / 86400) + "d " + dos(Math.floor(r % 86400 / 3600)) + "h " + dos(Math.floor(r % 3600 / 60)) + "m " + dos(r % 60) + "s";
+      cuentas.forEach(function (b) { b.textContent = t; });
+      if (r === 0) location.reload();   // al terminar, la página vuelve al precio normal
+    };
+    tic(); setInterval(tic, 1000);
+  }
   $$("[data-href]").forEach(function (el) {
     var k = el.dataset.href;
     var v = k === "CORREO_MAILTO" ? "mailto:" + C.CORREO : C[k];

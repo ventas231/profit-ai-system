@@ -50,7 +50,7 @@ const KIT = {
 const NIVEL1 = { monto: '497.00', moneda: 'USD', curso: 'profit-ai-system' };   // curso = slug del curso en la plataforma
 // Promocion del Nivel 1: el mismo monto y fechas que PROMO_N1 en assets/config.js del sitio.
 // Ese monto solo se acepta si PayPal creo el pedido dentro de las fechas (con 2 h de margen al cierre).
-const PROMO_N1 = { monto: '372.75', inicio: '2026-11-13T00:00:00-06:00', fin: '2026-11-17T00:00:00-06:00' };
+const PROMO_N1 = { monto: '372.75', inicio: '2026-11-11T00:00:00-06:00', fin: '2026-11-17T00:00:00-06:00' };
 function montoValido(monto, orden) {
   if (monto.value === NIVEL1.monto) return true;
   if (!PROMO_N1.monto || monto.value !== PROMO_N1.monto) return false;
