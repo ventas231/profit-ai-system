@@ -48,6 +48,15 @@ const KIT = {
   LINK_SIGUIENTE: 'https://profitaisystem.gerardovilla.mx/acceso.html#vsl',
 };
 const NIVEL1 = { monto: '497.00', moneda: 'USD', curso: 'profit-ai-system' };   // curso = slug del curso en la plataforma
+// Promocion del Nivel 1: el mismo monto y fechas que PROMO_N1 en assets/config.js del sitio.
+// Ese monto solo se acepta si PayPal creo el pedido dentro de las fechas (con 2 h de margen al cierre).
+const PROMO_N1 = { monto: '372.75', inicio: '2026-11-13T00:00:00-06:00', fin: '2026-11-17T00:00:00-06:00' };
+function montoValido(monto, orden) {
+  if (monto.value === NIVEL1.monto) return true;
+  if (!PROMO_N1.monto || monto.value !== PROMO_N1.monto) return false;
+  const creado = Date.parse(orden.create_time || '');
+  return !isNaN(creado) && creado >= Date.parse(PROMO_N1.inicio) && creado < Date.parse(PROMO_N1.fin) + 2 * 3600 * 1000;
+}
 // ---- Plataforma de cursos (cursos.gerardovilla.mx) ----
 // Con PLATAFORMA_URL y PLATAFORMA_SECRETO en Propiedades del script, el pago da de alta al alumno en la
 // plataforma y el correo lleva su enlace para crear contraseña. Sin esas dos propiedades sigue el enlace
@@ -148,7 +157,7 @@ function enviarAcceso(email, pedido) {
   const cobro = ((unidad.payments || {}).captures || [])[0] || {};
   const monto = cobro.amount || unidad.amount || {};
   const cobrado = orden.status === 'COMPLETED' && cobro.status === 'COMPLETED'
-    && monto.value === NIVEL1.monto && monto.currency_code === NIVEL1.moneda;
+    && montoValido(monto, orden) && monto.currency_code === NIVEL1.moneda;
   if (!cobrado) return 'no_cobrado';
 
   let acceso = { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };

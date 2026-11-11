@@ -7,7 +7,7 @@
   var msg = function (t) { aviso.textContent = t; aviso.hidden = false; };
   var gracias = function (id) {
     if (window.ProfitAI) window.ProfitAI.palomita("pago", id);
-    try { if (window.fbq && id) fbq("track", "Purchase", { value: 497, currency: "USD", content_name: "Profit AI System Nivel 1" }, { eventID: id }); } catch (e) {}
+    try { if (window.fbq && id) fbq("track", "Purchase", { value: parseFloat(C.N1_MONTO) || 497, currency: "USD", content_name: "Profit AI System Nivel 1" }, { eventID: id }); } catch (e) {}
     setTimeout(function () { location.href = "gracias.html" + (id ? "?pedido=" + encodeURIComponent(id) : ""); }, 600);
   };
   var load = function (src, done) {

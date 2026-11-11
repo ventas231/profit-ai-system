@@ -84,6 +84,8 @@ section.deep{background:var(--deep)}
 .price{border-top:1px solid var(--line);padding-top:16px;display:grid;gap:4px}
 .price strong{font:800 34px var(--f-display);letter-spacing:-.03em}
 .price span{font-size:13px;color:var(--muted)}
+.price .promo-precio{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:15px;color:var(--muted)}
+.price .promo-precio s{font-weight:700}
 .compare{margin-top:28px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px 24px;font-size:16px}
 
 /* Gerardo */
