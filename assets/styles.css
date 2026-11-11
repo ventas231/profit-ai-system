@@ -372,3 +372,6 @@ body[data-pagina="inicio"] .btn-glow:hover::after{background-position:-50% 0}
   body[data-pagina="inicio"] .btn-glow,body[data-pagina="inicio"] .btn-glow::after{animation:none;transition:none}
   .ih-form input,.ih-contesta li{transition:none}
 }
+
+/* Niveles: frase del equipo arriba de la lista de agentes */
+.incluye .equipo{margin-top:10px;font:700 14px var(--f-body);color:var(--orange-soft)}
