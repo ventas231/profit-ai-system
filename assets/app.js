@@ -79,36 +79,11 @@
       st.innerHTML = P.logo ? '<img src="' + encodeURI(P.logo) + '" alt=""><b class="promo-sticker-pct">-' + P.descuento + '</b>' : '<span>Buen<br>Fin</span><b>-' + P.descuento + '</b>';
       box.appendChild(st);
     });
-    // Página principal: aviso de la promoción arriba, con cuenta regresiva y botón al formulario
-    var celdas = null;
-    if (pagina === "inicio" && !(function () { try { return sessionStorage.getItem("pais_promo_cerrada"); } catch (e) { return ""; } })()) {
-      var bar = document.createElement("section"); bar.className = "promo-barra"; bar.setAttribute("aria-label", "Promoción " + P.nombre);
-      bar.innerHTML = (P.logo ? '<img class="promo-barra-logo" src="' + encodeURI(P.logo) + '" alt="Buen Fin">' : '') +
-        '<div class="promo-barra-txt"><b class="promo-pill">\ud83d\udd25 \u00a1Se adelant\u00f3 el Buen Fin!</b>' +
-        '<p><b>-' + P.descuento + '</b> en el Nivel 1 de Profit AI System: <s>' + precioLista + '</s> <b class="promo-barra-precio">' + P.precio + '</b></p>' +
-        '<small>' + (P.cierre || "") + '</small></div>' +
-        '<div class="promo-reloj" aria-live="off"><span><b>0</b><i>d\u00edas</i></span><span><b>00</b><i>horas</i></span><span><b>00</b><i>min</i></span><span><b>00</b><i>seg</i></span></div>' +
-        '<a class="btn promo-barra-btn" href="#correo">Aprovechar el -' + P.descuento + ' \u2192</a>' +
-        '<button type="button" class="promo-barra-x" aria-label="Cerrar aviso">\u00d7</button>';
-      document.body.insertBefore(bar, document.body.firstChild);
-      celdas = bar.querySelectorAll(".promo-reloj b");
-      bar.querySelector(".promo-barra-btn").addEventListener("click", function (e) {
-        e.preventDefault();
-        var inp = document.getElementById("email-hero");
-        if (inp) { inp.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(function () { inp.focus({ preventScroll: true }); }, 500); }
-      });
-      bar.querySelector(".promo-barra-x").addEventListener("click", function () { try { sessionStorage.setItem("pais_promo_cerrada", "1"); } catch (e) {} bar.remove(); });
-    }
     var finMs = Date.parse(P.fin), dos = function (n) { return (n < 10 ? "0" : "") + n; };
     var tic = function () {
       var r = Math.max(0, Math.floor((finMs - Date.now()) / 1000));
       var t = Math.floor(r / 86400) + "d " + dos(Math.floor(r % 86400 / 3600)) + "h " + dos(Math.floor(r % 3600 / 60)) + "m " + dos(r % 60) + "s";
       cuentas.forEach(function (b) { b.textContent = t; });
-      if (celdas && document.body.contains(celdas[0])) {
-        [String(Math.floor(r / 86400)), dos(Math.floor(r % 86400 / 3600)), dos(Math.floor(r % 3600 / 60)), dos(r % 60)].forEach(function (v, i) {
-          if (celdas[i].textContent !== v) { celdas[i].textContent = v; celdas[i].classList.remove("gira"); void celdas[i].offsetWidth; celdas[i].classList.add("gira"); }
-        });
-      }
       if (r === 0) location.reload();   // al terminar, la página vuelve al precio normal
     };
     tic(); setInterval(tic, 1000);
