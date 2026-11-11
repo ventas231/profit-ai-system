@@ -39,7 +39,7 @@ const ACCESO = {
   WHATSAPP: 'https://wa.me/522223288421',   // dudas por WhatsApp
 };
 // ---- Correo con el kit de diagnóstico ----
-// Se manda una sola vez por correo, la primera vez que alguien se registra.
+// Se manda cada vez que alguien deja su correo; se salta si ese correo lo recibió hace menos de 5 minutos.
 const KIT = {
   LINK_VIDEO: 'https://youtu.be/CJNnyfTbQog',   // video de cómo usar el agente (YouTube oculto). Sin este enlace el correo no se manda.
   LINK_AGENTE: 'https://profitaisystem.gerardovilla.mx/descargas/pas-diagnostico-rentabilidad-v1-8-10.zip',
