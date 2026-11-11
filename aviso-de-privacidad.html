@@ -25,6 +25,8 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=1524049399397099&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+<!-- Vigía de envío de ChatGPT Ads: anota solo las solicitudes a openai.com cuyo contenido trae "lead_created" (no manda nada) -->
+<script>!function(w){var R=/^https:\/\/([a-z0-9-]+\.)*openai\.com\//,L="lead_created",E=w.__oaiEnvios=[];function reg(u,b,via){var e=null;try{if(!R.test(String(u&&u.url||u)))return null;var c=function(t){if(e||typeof t!=="string"||t.indexOf(L)<0)return;e={via:via,t:Date.now(),estado:null};E.push(e);try{w.dispatchEvent(new CustomEvent("oai-lead-solicitud",{detail:e}))}catch(x){}};if(typeof b==="string")c(b);else if(b instanceof URLSearchParams)c(b.toString());else if(b&&typeof b.text==="function")b.text().then(c,function(){});}catch(x){}return function(s){if(e){e.estado=s;try{w.dispatchEvent(new CustomEvent("oai-lead-respuesta",{detail:e}))}catch(x){}}}}var f=w.fetch;if(f)w.fetch=function(i,o){var r=reg(i,o&&o.body,"fetch");var p=f.apply(this,arguments);if(r)p.then(function(x){r(x.status||"opaca")},function(){r("error")});return p};var n=w.navigator;if(n&&n.sendBeacon){var sb=n.sendBeacon.bind(n);n.sendBeacon=function(u,d){var r=reg(u,d,"beacon");var ok=sb(u,d);if(r)r(ok?"en cola":"rechazada");return ok}}var X=w.XMLHttpRequest&&w.XMLHttpRequest.prototype;if(X){var op=X.open,se=X.send;X.open=function(m,u){this.__oaiU=u;return op.apply(this,arguments)};X.send=function(b){var r=reg(this.__oaiU,b,"xhr"),x=this;if(r)x.addEventListener("loadend",function(){r(x.status||"error")});return se.apply(this,arguments)}}}(window);</script>
 <!-- ChatGPT Ads (OpenAI) Pixel: debug solo con ?oai_debug=1 en la URL -->
 <script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"CTZKDrCM46o4jcM1QPURTB",debug:/[?&]oai_debug=1(&|$)/.test(location.search)});</script>
 <!-- End ChatGPT Ads Pixel -->
@@ -65,7 +67,7 @@ src="https://www.facebook.com/tr?id=1524049399397099&ev=PageView&noscript=1"
 <a class="wa" href="#" data-href="WHATSAPP_URL" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp">
   <svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg><span>WhatsApp</span>
 </a>
-<script src="assets/config.js?v=20261111"></script>
-<script src="assets/app.js?v=20261111"></script>
+<script src="assets/config.js?v=20261111b"></script>
+<script src="assets/app.js?v=20261111b"></script>
 </body>
 </html>
