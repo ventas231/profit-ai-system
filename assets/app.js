@@ -20,10 +20,26 @@
   var leadYaEnviado = function (email) { return correo() === email || ("|" + ls.get("leads") + "|").indexOf("|" + email + "|") >= 0; };
   var marcarLead = function (email) { var l = ls.get("leads"); ls.set("leads", l ? l + "|" + email : email); };
 
+  // ChatGPT Ads: "lead_created" solo cuando la hoja confirmó que guardó el correo y solo para registros nuevos.
+  // Si la hoja dice nuevo:false (el correo ya existía), no se manda. Si no lo dice, se evita repetir por navegador.
+  var oai = function () { try { if (window.oaiq) window.oaiq.apply(window, arguments); } catch (e) {} };
+  var oaiYaEnviado = function (email) { return ("|" + ls.get("oai_leads") + "|").indexOf("|" + email + "|") >= 0; };
+  var oaiMarcar = function (email) { var l = ls.get("oai_leads"); ls.set("oai_leads", l ? l + "|" + email : email); };
+  // Parámetros de atribución que viajan al siguiente paso (UTM, oppref de ChatGPT, fbclid, gclid).
+  var ATRIB = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "oppref", "fbclid", "gclid"];
+  var conAtribucion = function (destino) {
+    try {
+      var q = new URLSearchParams(location.search), out = new URLSearchParams();
+      ATRIB.forEach(function (k) { if (q.get(k)) out.set(k, q.get(k)); });
+      var t = out.toString();
+      return t ? destino + (destino.indexOf("?") < 0 ? "?" : "&") + t : destino;
+    } catch (e) { return destino; }
+  };
+
   // ---- UTM de la primera visita ----
   try {
     var q = new URLSearchParams(location.search);
-    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "fbclid"].forEach(function (k) { if (q.get(k)) ls.set(k, q.get(k)); });
+    ["utm_source", "utm_medium", "utm_campaign", "utm_content", "fbclid", "oppref"].forEach(function (k) { if (q.get(k)) ls.set(k, q.get(k)); });
   } catch (e) {}
 
   // ---- Textos y enlaces desde config.js ----
@@ -142,17 +158,27 @@
     var aviso = document.createElement("p");
     aviso.className = "ok"; aviso.hidden = true; aviso.setAttribute("role", "status");
     f.appendChild(aviso);
+    var enviando = false;   // evita dobles envíos (doble clic o Enter repetido)
     f.addEventListener("submit", function (e) {
       e.preventDefault();
+      if (enviando) return;
+      enviando = true;
       var email = f.querySelector("input[type=email]").value.trim().toLowerCase();
       var btn = f.querySelector("button");
       var texto = btn.textContent;
       btn.disabled = true; btn.textContent = "Guardando…";
-      var irAcceso = function () {
+      var irAcceso = function (respuesta) {   // respuesta = lo que confirmó la hoja; vacío si no se guardó (modo prueba)
         if (!leadYaEnviado(email)) { meta("Lead", { content_name: "Kit de diagnóstico" }); marcarLead(email); }
-        ls.set("correo", email); ss.set("visita", "1"); location.href = "sistema.html";
+        var midio = false;
+        if (respuesta && respuesta.ok && respuesta.nuevo !== false && !oaiYaEnviado(email)) {
+          oai("measure", "lead_created", { type: "customer_action" }); oaiMarcar(email); midio = true;
+        }
+        ls.set("correo", email); ss.set("visita", "1");
+        var ir = function () { location.href = conAtribucion("sistema.html"); };
+        if (midio) setTimeout(ir, 400); else ir();   // un respiro para que salga el evento; el correo ya está guardado
       };   // mientras no esté el video VSL va directo a los niveles; con el video, regresar a "acceso.html"
       var error = function () {
+        enviando = false;
         btn.disabled = false; btn.textContent = texto;
         aviso.textContent = "No pudimos registrar tu correo. Revisa tu conexión e intenta de nuevo, o escríbenos a " + C.CORREO + ".";
         aviso.hidden = false;
@@ -162,7 +188,7 @@
         return new Promise(function (ok) { setTimeout(ok, 1200); }).then(function () { return hoja("registro", email); });
       });
       registro.then(irAcceso).catch(function () {
-        if (C.MODO_PRUEBA) { console.warn("[Profit AI] La hoja no respondió (modo prueba): el correo NO se guardó."); irAcceso(); }
+        if (C.MODO_PRUEBA) { console.warn("[Profit AI] La hoja no respondió (modo prueba): el correo NO se guardó."); irAcceso(null); }
         else error();
       });
     });

@@ -85,6 +85,7 @@ function doPost(e) {
 
     const ahora = Utilities.formatDate(new Date(), ZONA, FORMATO);
     let fila = buscarFila(hoja, cCorreo, email);
+    const esNuevo = !fila;             // para que la página sepa si es un registro nuevo (ChatGPT Ads: lead_created)
 
     if (!fila) {                       // primera vez: se crea la fila con día y hora
       fila = hoja.getLastRow() + 1;
@@ -124,7 +125,7 @@ function doPost(e) {
       }
       return salida({ ok: true, fila: fila, acceso: envio });
     }
-    return salida({ ok: true, fila: fila });
+    return salida({ ok: true, fila: fila, nuevo: esNuevo });
   } catch (err) {
     return salida({ ok: false, error: String(err) });
   } finally {
