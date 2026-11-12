@@ -90,8 +90,8 @@ section.deep{background:var(--deep)}
 .promo-pill{display:inline-block;background:#e3262d;color:#fff;font:800 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;box-shadow:0 0 0 0 rgba(227,38,45,.6);animation:promoLatido 1.8s ease-out infinite}
 .promo-cuenta{font:700 13px var(--f-mono);color:#ff6b6b;letter-spacing:.02em}
 .promo-cuenta b{color:#fff;font-variant-numeric:tabular-nums}
-.pack.hl,.pago-promo{position:relative}
-.pack.hl:has(.promo-sticker){border-color:#e3262d;box-shadow:0 0 0 1px rgba(227,38,45,.35),0 18px 50px -20px rgba(227,38,45,.55)}
+.pack.hl,.pack.con-promo,.pago-promo{position:relative}
+.pack:has(.promo-sticker){border-color:#e3262d;box-shadow:0 0 0 1px rgba(227,38,45,.35),0 18px 50px -20px rgba(227,38,45,.55)}
 .promo-sticker{position:absolute;top:-22px;right:-10px;width:92px;height:92px;border-radius:50%;background:#e3262d;color:#fff;display:grid;place-content:center;text-align:center;transform:rotate(12deg);box-shadow:0 10px 24px -8px rgba(0,0,0,.6);border:3px solid #fff;z-index:2;animation:promoSticker 3s ease-in-out infinite;pointer-events:none}
 .promo-sticker span{font:800 13px/1.05 var(--f-display);text-transform:uppercase;letter-spacing:.02em}
 .promo-sticker b{font:900 22px/1 var(--f-display)}
@@ -101,7 +101,9 @@ section.deep{background:var(--deep)}
 @keyframes promoLatido{0%{box-shadow:0 0 0 0 rgba(227,38,45,.6)}70%{box-shadow:0 0 0 12px rgba(227,38,45,0)}100%{box-shadow:0 0 0 0 rgba(227,38,45,0)}}
 @keyframes promoSticker{0%,100%{transform:rotate(12deg) scale(1)}50%{transform:rotate(6deg) scale(1.07)}}
 @media (max-width:640px){.promo-sticker:has(img){width:96px;height:96px;top:-28px;right:-8px}.promo-sticker{width:76px;height:76px;top:-18px;right:-6px}.promo-sticker b{font-size:18px}.promo-sticker span{font-size:11px}}
-.pack.hl .promo-sticker .promo-sticker-pct{right:auto;left:-40px;bottom:4px}
+.pack .promo-sticker .promo-sticker-pct{right:auto;left:-40px;bottom:4px}
+.pack.con-promo .promo-sticker .promo-sticker-pct{left:auto;right:2px;bottom:-26px}
+.pack.con-promo h3{padding-right:64px}
 .pago-promo .promo-sticker:has(img){width:88px;height:88px;top:-44px;right:-10px}
 .pago-promo .promo-sticker .promo-sticker-pct{font-size:14px;bottom:-14px}
 @media (prefers-reduced-motion:reduce){.promo-pill,.promo-sticker{animation:none}}

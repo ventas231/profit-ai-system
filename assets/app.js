@@ -10,8 +10,8 @@
   // ---- Promocion del Nivel 1 (config.js, PROMO_N1): solo entre inicio y fin ----
   var P = C.PROMO_N1, ahoraMs = Date.now();
   var promo = !!(P && P.monto && ahoraMs >= Date.parse(P.inicio) && ahoraMs < Date.parse(P.fin));
-  var precioLista = C.PRECIO_N1;
-  if (promo) { C.PRECIO_N1 = P.precio; C.N1_MONTO = P.monto; }   // paypal.js lee N1_MONTO despues de este archivo
+  var precioLista = C.PRECIO_N1, precioListaN2 = C.PRECIO_N2;
+  if (promo) { C.PRECIO_N1 = P.precio; C.N1_MONTO = P.monto; if (P.precio_n2) C.PRECIO_N2 = P.precio_n2; }   // paypal.js lee N1_MONTO despues de este archivo
   var valorN1 = parseFloat(C.N1_MONTO) || 497;
   // Meta Pixel: eventos de conversión (si el píxel cargó)
   // La copia de servidor la hace "API de conversiones con Meta" y Meta ya la deduplica (100% con identificador de evento).
@@ -64,17 +64,19 @@
   $$("[data-cfg]").forEach(function (el) { var v = C[el.dataset.cfg]; if (v) el.textContent = v; });
   if (promo) {
     var cuentas = [];
-    $$('[data-cfg="PRECIO_N1"]').forEach(function (el) {
+    $$('[data-cfg="PRECIO_N1"]' + (P.precio_n2 ? ', [data-cfg="PRECIO_N2"]' : '')).forEach(function (el) {
+      var lista = el.dataset.cfg === "PRECIO_N2" ? precioListaN2 : precioLista;
+      if (el.dataset.cfg === "PRECIO_N2") { var pk = el.closest(".pack"); if (pk) pk.classList.add("con-promo"); }
       var tag = document.createElement("span"); tag.className = "promo-precio";
-      tag.innerHTML = '<b class="promo-pill">\ud83d\udd25 ' + P.nombre + ' \u00b7 -' + P.descuento + '</b> <s>' + precioLista + '</s>';
+      tag.innerHTML = '<b class="promo-pill">\ud83d\udd25 ' + P.nombre + ' \u00b7 -' + P.descuento + '</b> <s>' + lista + '</s>';
       el.parentNode.insertBefore(tag, el);
       var c = document.createElement("span"); c.className = "promo-cuenta";
       c.innerHTML = (P.cierre || "Termina pronto") + ' \u00b7 quedan <b></b>';
       el.parentNode.insertBefore(c, el.nextSibling);
       cuentas.push(c.querySelector("b"));
     });
-    // Sticker en la tarjeta del Nivel 1 (y en la caja de pago)
-    $$(".pack.hl, .pago-promo").forEach(function (box) {
+    // Sticker en las tarjetas con promocion (Nivel 1, Nivel 2) y en la caja de pago
+    $$(".pack.hl, .pack.con-promo, .pago-promo").forEach(function (box) {
       var st = document.createElement("div"); st.className = "promo-sticker"; st.setAttribute("aria-hidden", "true");
       st.innerHTML = P.logo ? '<img src="' + encodeURI(P.logo) + '" alt=""><b class="promo-sticker-pct">-' + P.descuento + '</b>' : '<span>Buen<br>Fin</span><b>-' + P.descuento + '</b>';
       box.appendChild(st);
