@@ -405,4 +405,3 @@ body[data-pagina="inicio"] .btn-glow:hover::after{background-position:-50% 0}
 /* Nivel 2: opción de pagar solo la diferencia si ya compró el Kit */
 .pack .subida{display:grid;gap:10px;padding:14px;border:1px dashed rgba(255,153,0,.45);border-radius:14px;font-size:14px;line-height:1.5;color:var(--muted)}
 .pack .subida b{color:var(--fg)}
-.btn-ghost{background:transparent;color:var(--orange);border:1.5px solid var(--orange)}

@@ -57,11 +57,6 @@ const PRODUCTOS = {
   '497.00': { nivel: 'Nivel 2', nombre: 'Profit AI System completo', precio: 'US$497', curso: 'profit-ai-system',
     agentes: 'Analista de Rentabilidad · Gestor de PPC · Asesor de Nuevas Ventas · Estratega de Campañas · Redactor de Listings · Fotógrafo y Diseñador de A+ · Planeador de Inventario',
     extra: '' },
-  // Pase del Kit al sistema completo: el acceso NO es automático. Se avisa a cursos@ para comprobar que ese correo compró
-  // el Kit hace 14 días o menos; si sí, se corre darAccesoSubida() con el correo y el pedido.
-  '400.00': { nivel: 'Nivel 2', nombre: 'Pase al sistema completo', precio: 'US$400', curso: 'profit-ai-system', manual: true,
-    agentes: 'Analista de Rentabilidad · Gestor de PPC · Asesor de Nuevas Ventas · Estratega de Campañas · Redactor de Listings · Fotógrafo y Diseñador de A+ · Planeador de Inventario',
-    extra: '' },
 };
 const CITA_URL = 'https://calendly.com/cursos-summaproducts/profit-ai-system';
 function productoDe(monto) { return monto && monto.currency_code === MONEDA ? PRODUCTOS[monto.value] || null : null; }
@@ -167,7 +162,6 @@ function enviarAcceso(email, pedido) {
   const prod = productoDe(monto);
   const cobrado = orden.status === 'COMPLETED' && cobro.status === 'COMPLETED' && !!prod;
   if (!cobrado) return 'no_cobrado';
-  if (prod.manual) return avisarSubida(email, pedido, props);
 
   let acceso = { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };
   if (props.getProperty('PLATAFORMA_URL') && props.getProperty('PLATAFORMA_SECRETO')) {
@@ -214,31 +208,18 @@ function avisarFallo(email, pedido, props) {
   props.setProperty(clave, new Date().toISOString());
 }
 
-// Pago de la diferencia (US$400): avisa a cursos@ para comprobar la compra del Kit y le confirma al cliente que se recibió.
-function avisarSubida(email, pedido, props) {
-  const clave = 'subida_' + pedido;
-  if (props.getProperty(clave)) return 'ya_enviado';
-  MailApp.sendEmail({ to: RESPONDER_A, name: REMITENTE, subject: '[REVISAR] Pase al sistema completo (US$400) · ' + email,
-    body: email + ' pagó US$400 para pasar del Kit al sistema completo (pedido ' + pedido + ').\n'
-      + '1) Comprueba en PayPal que ese correo compró el Kit (US$97) hace 14 días o menos.\n'
-      + '2) Si sí: en este Apps Script abre darAccesoSubida(), pon el correo y el pedido y dale Ejecutar. Le llega su acceso al Nivel 2.\n'
-      + '3) Si no: escríbele y, si aplica, reembolsa desde PayPal.' });
-  MailApp.sendEmail({ to: email, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Recibimos tu pago · Pase al sistema completo',
-    body: 'Recibimos tu pago de US$400 (pedido ' + pedido + '). Comprobamos tu compra del Kit de Utilidad y te mandamos tu acceso a los 6 agentes a este correo. ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
-  props.setProperty(clave, new Date().toISOString());
-  return 'enviado';
-}
-
-/** Después de comprobar la compra del Kit: pon el correo y el pedido del pago de US$400 y dale Ejecutar. */
-function darAccesoSubida() {
-  const email = 'correo@ejemplo.com';   // ← correo del aviso [REVISAR] Pase al sistema completo
-  const pedido = 'PEDIDO';              // ← número de pedido del aviso
+/** Pase del Kit al sistema completo (US$400 por WhatsApp, dentro de 14 días desde la compra del Kit).
+ *  Después de comprobar la compra del Kit y cobrar la diferencia: pon el correo y la referencia del cobro y dale Ejecutar.
+ *  Lo da de alta en el curso del sistema completo y le manda el correo de bienvenida del Nivel 2. */
+function darAccesoNivel2() {
+  const email = 'correo@ejemplo.com';   // ← correo con el que compró el Kit
+  const pedido = 'PEDIDO';              // ← número de cobro de PayPal de los US$400
   const props = PropertiesService.getScriptProperties();
-  const prod = PRODUCTOS['400.00'];
+  const prod = PRODUCTOS['497.00'];
   const alta = altaPlataforma(email.trim().toLowerCase(), pedido, { value: '400.00', currency_code: MONEDA }, props, prod.curso);
   if (!alta) { Logger.log('ERROR: la plataforma no dio de alta. Revisa y vuelve a intentar.'); return; }
   const acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
-  MailApp.sendEmail({ to: email, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System completo · Nivel 2',
+  MailApp.sendEmail({ to: email, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a ' + prod.nombre + ' · ' + prod.nivel,
     htmlBody: armarCorreo(email, pedido, acceso, prod) });
   Logger.log('OK: acceso al sistema completo enviado a ' + email);
 }
