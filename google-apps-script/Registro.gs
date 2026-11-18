@@ -51,7 +51,9 @@ const KIT = {
 // Los montos deben ser los mismos que N1_MONTO y N2_MONTO en assets/config.js del sitio.
 const MONEDA = 'USD';
 const PRODUCTOS = {
-  '97.00': { nivel: 'Nivel 1', nombre: 'Kit de Utilidad: PPC + Inventario', precio: 'US$97', curso: 'kit-de-utilidad',   // ← confirmar el slug con Gerardo
+  // El Kit se entrega con el enlace de registro de su curso en la plataforma. El enlace lleva una clave:
+  // va en Propiedades del script como KIT_REGISTRO_URL, nunca aquí (este archivo es público en GitHub).
+  '97.00': { nivel: 'Nivel 1', nombre: 'Kit de Utilidad: PPC + Inventario', precio: 'US$97', registro: 'KIT_REGISTRO_URL',
     agentes: 'Gestor de PPC · Planeador de Inventario',
     extra: 'Tu primera corrida no la lees solo: agenda tu cita y la revisamos contigo.' },
   '497.00': { nivel: 'Nivel 2', nombre: 'Profit AI System completo', precio: 'US$497', curso: 'profit-ai-system',
@@ -68,6 +70,7 @@ function productoDe(monto) { return monto && monto.currency_code === MONEDA ? PR
 const TEXTOS_ACCESO = {
   kajabi: { titulo: 'Crea tu acceso al curso', texto: 'Regístrate con este mismo correo.', boton: 'Entrar a mi curso' },
   nuevo: { titulo: 'Crea tu contraseña y entra', texto: 'Con este botón creas tu contraseña y entras a tu curso. El enlace vale 7 días y se usa una sola vez; si vence, en la página de entrada elige «Olvidé mi contraseña».', boton: 'Crear mi contraseña' },
+  registro: { titulo: 'Crea tu cuenta y entra a tu Kit', texto: 'Regístrate con este mismo correo.', boton: 'Crear mi cuenta' },
   existente: { titulo: 'Ya está en tu cuenta', texto: 'Entra con tu correo y la contraseña que ya tienes.', boton: 'Entrar a mi curso' },
 };
 const REMITENTE = 'Profit AI System';
@@ -164,7 +167,11 @@ function enviarAcceso(email, pedido) {
   if (!cobrado) return 'no_cobrado';
 
   let acceso = { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };
-  if (props.getProperty('PLATAFORMA_URL') && props.getProperty('PLATAFORMA_SECRETO')) {
+  if (prod.registro) {               // Kit: enlace de registro a su curso
+    const enlace = props.getProperty(prod.registro);
+    if (!enlace) { avisarFallo(email, pedido, props); return 'sin_enlaces'; }
+    acceso = { enlace: enlace, modo: 'registro' };
+  } else if (props.getProperty('PLATAFORMA_URL') && props.getProperty('PLATAFORMA_SECRETO')) {
     const alta = altaPlataforma(email, pedido, monto, props, prod.curso);
     if (!alta) {                     // no se marca como enviado: el reintento o reintentarAcceso() lo vuelve a intentar
       avisarFallo(email, pedido, props);
@@ -242,6 +249,13 @@ function pruebaAlta() {
   }
   const pedido = 'PRUEBA-' + Date.now();
   const prod = PRODUCTOS[MONTO_PRUEBA];
+  if (prod.registro) {               // Kit: no hay alta, solo el correo con el enlace de registro
+    const enlace = props.getProperty(prod.registro);
+    if (!enlace) { Logger.log('FALTA: ' + prod.registro + ' en Propiedades del script.'); return; }
+    MailApp.sendEmail({ to: correo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a ' + prod.nombre + ' · ' + prod.nivel,
+      htmlBody: armarCorreo(correo, pedido, { enlace: enlace, modo: 'registro' }, prod) });
+    Logger.log('OK: correo de bienvenida del Kit enviado a ' + correo); return;
+  }
   const alta = altaPlataforma(correo.trim().toLowerCase(), pedido, { value: '0.00', currency_code: 'USD' }, props, prod.curso);
   if (!alta) { Logger.log('ERROR: la plataforma no dio de alta. Revisa la clave y la dirección (el motivo está arriba).'); return; }
   const acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
