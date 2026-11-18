@@ -55,7 +55,7 @@ const PRODUCTOS = {
   // va en Propiedades del script como KIT_REGISTRO_URL, nunca aquí (este archivo es público en GitHub).
   '97.00': { nivel: 'Nivel 1', nombre: 'Kit de Utilidad: PPC + Inventario', precio: 'US$97', registro: 'KIT_REGISTRO_URL',
     agentes: 'Gestor de PPC · Planeador de Inventario',
-    extra: 'Tu primera corrida no la lees solo: agenda tu cita y la revisamos contigo.' },
+    extra: '' },
   '497.00': { nivel: 'Nivel 2', nombre: 'Profit AI System completo', precio: 'US$497', curso: 'profit-ai-system',
     agentes: 'Analista de Rentabilidad · Gestor de PPC · Asesor de Nuevas Ventas · Estratega de Campañas · Redactor de Listings · Fotógrafo y Diseñador de A+ · Planeador de Inventario',
     extra: '' },
