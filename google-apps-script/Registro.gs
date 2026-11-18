@@ -47,7 +47,7 @@ const KIT = {
   LINK_EXCEL: 'https://profitaisystem.gerardovilla.mx/descargas/plantilla-de-costos-profit-ai-system.xlsx',
   LINK_SIGUIENTE: 'https://profitaisystem.gerardovilla.mx/acceso.html#vsl',
 };
-const NIVEL1 = { monto: '497.00', moneda: 'USD', curso: 'profit-ai-system' };   // curso = slug del curso en la plataforma
+const NIVEL1 = { monto: '497.00', moneda: 'USD', curso: 'kit-ppc-inventario' };   // curso = slug del curso en la plataforma (Nivel 1 = Kit PPC + Inventario desde 18-nov-2026)
 // Promocion del Nivel 1: el mismo monto y fechas que PROMO_N1 en assets/config.js del sitio.
 // Ese monto solo se acepta si PayPal creo el pedido dentro de las fechas (con 2 h de margen al cierre).
 const PROMO_N1 = { monto: '372.75', inicio: '2026-11-11T00:00:00-06:00', fin: '2026-11-17T00:00:00-06:00' };
