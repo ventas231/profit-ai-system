@@ -26,8 +26,12 @@ window.CONFIG = {
   PRECIO_N2: "US$497",
   NOMBRE_N1: "Kit de Utilidad: PPC + Inventario",
   NOMBRE_N2: "Profit AI System completo",
-  // Subida del Kit al sistema completo pagando la diferencia (US$400) dentro de 14 días: se pide por WhatsApp y se valida a mano.
-  WHATSAPP_SUBIDA_URL: "https://wa.me/522223288421?text=" + encodeURIComponent("Hola, compré el Kit de Utilidad y quiero pasar al sistema completo pagando la diferencia de US$400."),
+  // Nivel 3 · Lo hacemos juntos (90 días con Gerardo): se agenda por videollamada o WhatsApp, no se paga en la página.
+  PRECIO_N3: "US$2,424",
+  // Pase del Kit al sistema completo pagando solo la diferencia, dentro de 14 días desde la compra del Kit.
+  // Se cobra con PayPal; el acceso lo da el equipo a mano después de comprobar la compra del Kit.
+  PRECIO_SUBIDA: "US$400",
+  NOMBRE_SUBIDA: "Pase al sistema completo (ya tengo el Kit)",
 
   // ---- Hoja de Google donde se registran los correos y las palomitas ----
   // URL de la "aplicación web" de Apps Script instalada en la hoja (ver README).
@@ -42,6 +46,7 @@ window.CONFIG = {
   PAYPAL_MODO: "live",             // "sandbox" o "live" (live solo con precio aprobado)
   N1_MONTO: "97.00",               // Nivel 1 · Kit de Utilidad. El Apps Script (Registro.gs, PRODUCTOS) debe tener los mismos montos
   N2_MONTO: "497.00",              // Nivel 2 · sistema completo
+  SUBIDA_MONTO: "400.00",          // Pase del Kit al Nivel 2 (diferencia)
   MONEDA: "USD",
 
   // ---- Videos: enlace para insertar (YouTube no listado o Vimeo) ----

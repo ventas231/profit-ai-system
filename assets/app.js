@@ -12,12 +12,17 @@
   var promo = !!(P && P.monto && ahoraMs >= Date.parse(P.inicio) && ahoraMs < Date.parse(P.fin));
   var precioLista = C.PRECIO_N1, precioListaN2 = C.PRECIO_N2;
   if (promo) { C.PRECIO_N1 = P.precio; C.N1_MONTO = P.monto; if (P.precio_n2) C.PRECIO_N2 = P.precio_n2; }   // paypal.js lee N1_MONTO despues de este archivo
-  // ---- Nivel que se paga (pago.html?nivel=1 o 2; sin nivel = 2, el sistema completo) ----
-  var nivelPago = (function () { try { return new URLSearchParams(location.search).get("nivel") === "1" ? "1" : "2"; } catch (e) { return "2"; } })();
+  // ---- Lo que se paga: pago.html?nivel=1 (Kit), 2 (sistema completo, también sin nivel) o subida (diferencia de US$400) ----
+  var nivelPago = (function () { try { var n = new URLSearchParams(location.search).get("nivel"); return n === "1" || n === "subida" ? n : "2"; } catch (e) { return "2"; } })();
+  var PAGOS = {
+    "1": { monto: C.N1_MONTO, precio: C.PRECIO_N1, producto: C.NOMBRE_N1 + " · Nivel 1" },
+    "2": { monto: C.N2_MONTO, precio: C.PRECIO_N2, producto: C.NOMBRE_N2 + " · Nivel 2" },
+    "subida": { monto: C.SUBIDA_MONTO, precio: C.PRECIO_SUBIDA, producto: C.NOMBRE_SUBIDA }
+  };
   C.NIVEL_PAGO = nivelPago;
-  C.MONTO_PAGO = nivelPago === "1" ? C.N1_MONTO : C.N2_MONTO;   // paypal.js lo lee después de este archivo
-  C.PRODUCTO_PAGO = (nivelPago === "1" ? C.NOMBRE_N1 : C.NOMBRE_N2) + " · Nivel " + nivelPago;
-  C.PRECIO_PAGO = nivelPago === "1" ? C.PRECIO_N1 : C.PRECIO_N2;
+  C.MONTO_PAGO = PAGOS[nivelPago].monto;   // paypal.js lo lee después de este archivo
+  C.PRODUCTO_PAGO = PAGOS[nivelPago].producto;
+  C.PRECIO_PAGO = PAGOS[nivelPago].precio;
   var valorPago = parseFloat(C.MONTO_PAGO) || 0;
   // Meta Pixel: eventos de conversión (si el píxel cargó)
   // La copia de servidor la hace "API de conversiones con Meta" y Meta ya la deduplica (100% con identificador de evento).
@@ -68,7 +73,7 @@
 
   // ---- Textos y enlaces desde config.js ----
   // pago.html y gracias.html: muestra solo los bloques del nivel que se está pagando
-  $$("[data-nivel]").forEach(function (el) { el.hidden = el.dataset.nivel !== nivelPago; });
+  $$("[data-nivel]").forEach(function (el) { el.hidden = el.dataset.nivel.split(" ").indexOf(nivelPago) < 0; });
   $$("[data-cfg]").forEach(function (el) { var v = C[el.dataset.cfg]; if (v) el.textContent = v; });
   if (promo) {
     var cuentas = [];

@@ -40,12 +40,14 @@ src="https://www.facebook.com/tr?id=1524049399397099&ev=PageView&noscript=1"
   <span class="eyebrow">Pago recibido</span>
   <h1 data-nivel="2">Bienvenido a <em>Profit AI System.</em></h1>
   <h1 data-nivel="1" hidden>Bienvenido a tu <em>Kit de Utilidad.</em></h1>
-  <div class="aviso-correo" style="max-width:640px;font-size:18px">📩 <b>Revisa tu correo.</b> En unos minutos te llega tu acceso <b id="correo-destino">al correo que pusiste al registrarte</b>, con tus agentes. Si tienes dudas, escríbenos por WhatsApp.</div>
-  <p class="muted" style="max-width:640px">Si no lo ves, búscalo en Spam o Promociones. Si en 30 minutos no te llegó, escríbenos por WhatsApp con tu número de operación y te lo mandamos.</p>
+  <h1 data-nivel="subida" hidden>Recibimos tu pago para el <em>sistema completo.</em></h1>
+  <div data-nivel="subida" hidden class="aviso-correo" style="max-width:640px;font-size:18px">📩 <b>Ya casi.</b> Comprobamos tu compra del Kit y te mandamos tu acceso a los 6 agentes <b>al correo que pusiste al registrarte</b>. Si tienes dudas, escríbenos por WhatsApp con tu número de operación.</div>
+  <div data-nivel="1 2" class="aviso-correo" style="max-width:640px;font-size:18px">📩 <b>Revisa tu correo.</b> En unos minutos te llega tu acceso <b id="correo-destino">al correo que pusiste al registrarte</b>, con tus agentes. Si tienes dudas, escríbenos por WhatsApp.</div>
+  <p data-nivel="1 2" class="muted" style="max-width:640px">Si no lo ves, búscalo en Spam o Promociones. Si en 30 minutos no te llegó, escríbenos por WhatsApp con tu número de operación y te lo mandamos.</p>
   <p class="muted" id="pedido" hidden style="font-family:var(--f-mono);font-size:13px"></p>
   <div data-nivel="1" hidden class="aviso-correo" style="max-width:640px">🗓️ <b>Tu primera corrida no la lees solo.</b> Cuando la tengas, agenda tu cita y la revisamos contigo. <a href="#" data-href="CITA_URL" data-evento="agendo_cita" style="color:var(--orange);font-weight:700">Agendar mi cita</a></div>
-  <a class="btn btn-glow" href="https://cursos-gv.summaproducts.workers.dev" target="_blank" rel="noopener">Entrar a la plataforma de cursos</a>
-  <p class="muted" style="max-width:640px;font-size:14px;margin-top:-6px">Primero crea tu contraseña con el botón del correo; después entras aquí con ese mismo correo.</p>
+  <a data-nivel="1 2" class="btn btn-glow" href="https://cursos-gv.summaproducts.workers.dev" target="_blank" rel="noopener">Entrar a la plataforma de cursos</a>
+  <p data-nivel="1 2" class="muted" style="max-width:640px;font-size:14px;margin-top:-6px">Primero crea tu contraseña con el botón del correo; después entras aquí con ese mismo correo.</p>
   <a class="btn wa-btn" href="#" data-href="WHATSAPP_URL"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg>Escríbenos por WhatsApp</a>
 </div></section></main>
 <script>(function(){var id=new URLSearchParams(location.search).get("pedido");if(id){var p=document.getElementById("pedido");p.textContent="Número de operación de PayPal: "+id;p.hidden=false;}})();</script>
