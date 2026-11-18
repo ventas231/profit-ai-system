@@ -11,7 +11,7 @@
  *   cuentan cuántas veces entró cada correo (al registrarse y cada vez que regresa).
  * Pestaña HISTORIAL (se crea sola): una fila por cada cosa que hace cada correo, con fecha y hora.
  *
- * Correo de bienvenida del Nivel 1: al llegar el evento "pago" con su número de
+ * Correo de bienvenida (Nivel 1 Kit de Utilidad US$97 o Nivel 2 sistema completo US$497): al llegar el evento "pago" con su número de
  * pedido, el script confirma con PayPal que el pedido está cobrado por el monto
  * correcto y manda el correo (archivo Correo.html de este mismo proyecto).
  * Sin las llaves de PayPal en Propiedades del script NO manda nada: así nadie
@@ -32,7 +32,7 @@ const COLUMNAS = {
   agendo_cita: 'AGENDO CITA',
 };
 
-// ---- Correo de bienvenida del Nivel 1 ----
+// ---- Correo de bienvenida después del pago ----
 // Enlaces que van en los botones del correo.
 const ACCESO = {
   LINK_CURSO: 'https://expertoventasonline.mykajabi.com/offers/nziA6H2H',   // registro al curso en Kajabi: agentes, videos y guía
@@ -47,16 +47,21 @@ const KIT = {
   LINK_EXCEL: 'https://profitaisystem.gerardovilla.mx/descargas/plantilla-de-costos-profit-ai-system.xlsx',
   LINK_SIGUIENTE: 'https://profitaisystem.gerardovilla.mx/acceso.html#vsl',
 };
-const NIVEL1 = { monto: '497.00', moneda: 'USD', curso: 'profit-ai-system' };   // curso = slug del curso en la plataforma
-// Promocion del Nivel 1: el mismo monto y fechas que PROMO_N1 en assets/config.js del sitio.
-// Ese monto solo se acepta si PayPal creo el pedido dentro de las fechas (con 2 h de margen al cierre).
-const PROMO_N1 = { monto: '372.75', inicio: '2026-11-11T00:00:00-06:00', fin: '2026-11-17T00:00:00-06:00' };
-function montoValido(monto, orden) {
-  if (monto.value === NIVEL1.monto) return true;
-  if (!PROMO_N1.monto || monto.value !== PROMO_N1.monto) return false;
-  const creado = Date.parse(orden.create_time || '');
-  return !isNaN(creado) && creado >= Date.parse(PROMO_N1.inicio) && creado < Date.parse(PROMO_N1.fin) + 2 * 3600 * 1000;
-}
+// Lo que se vende por PayPal, según el monto cobrado. curso = slug del curso en la plataforma de cursos.
+// Los montos deben ser los mismos que N1_MONTO y N2_MONTO en assets/config.js del sitio.
+const MONEDA = 'USD';
+const PRODUCTOS = {
+  // El Kit se entrega con el enlace de registro de su curso en la plataforma. El enlace lleva una clave:
+  // va en Propiedades del script como KIT_REGISTRO_URL, nunca aquí (este archivo es público en GitHub).
+  '97.00': { nivel: 'Nivel 1', nombre: 'Kit de Utilidad: PPC + Inventario', precio: 'US$97', registro: 'KIT_REGISTRO_URL',
+    agentes: 'Gestor de PPC · Planeador de Inventario',
+    extra: 'Tu primera corrida no la lees solo: agenda tu cita y la revisamos contigo.' },
+  '497.00': { nivel: 'Nivel 2', nombre: 'Profit AI System completo', precio: 'US$497', curso: 'profit-ai-system',
+    agentes: 'Analista de Rentabilidad · Gestor de PPC · Asesor de Nuevas Ventas · Estratega de Campañas · Redactor de Listings · Fotógrafo y Diseñador de A+ · Planeador de Inventario',
+    extra: '' },
+};
+const CITA_URL = 'https://calendly.com/cursos-summaproducts/profit-ai-system';
+function productoDe(monto) { return monto && monto.currency_code === MONEDA ? PRODUCTOS[monto.value] || null : null; }
 // ---- Plataforma de cursos (cursos.gerardovilla.mx) ----
 // Con PLATAFORMA_URL y PLATAFORMA_SECRETO en Propiedades del script, el pago da de alta al alumno en la
 // plataforma y el correo lleva su enlace para crear contraseña. Sin esas dos propiedades sigue el enlace
@@ -65,6 +70,7 @@ function montoValido(monto, orden) {
 const TEXTOS_ACCESO = {
   kajabi: { titulo: 'Crea tu acceso al curso', texto: 'Regístrate con este mismo correo.', boton: 'Entrar a mi curso' },
   nuevo: { titulo: 'Crea tu contraseña y entra', texto: 'Con este botón creas tu contraseña y entras a tu curso. El enlace vale 7 días y se usa una sola vez; si vence, en la página de entrada elige «Olvidé mi contraseña».', boton: 'Crear mi contraseña' },
+  registro: { titulo: 'Crea tu cuenta y entra a tu Kit', texto: 'Regístrate con este mismo correo.', boton: 'Crear mi cuenta' },
   existente: { titulo: 'Ya está en tu cuenta', texto: 'Entra con tu correo y la contraseña que ya tienes.', boton: 'Entrar a mi curso' },
 };
 const REMITENTE = 'Profit AI System';
@@ -156,13 +162,17 @@ function enviarAcceso(email, pedido) {
   const unidad = (orden.purchase_units || [])[0] || {};
   const cobro = ((unidad.payments || {}).captures || [])[0] || {};
   const monto = cobro.amount || unidad.amount || {};
-  const cobrado = orden.status === 'COMPLETED' && cobro.status === 'COMPLETED'
-    && montoValido(monto, orden) && monto.currency_code === NIVEL1.moneda;
+  const prod = productoDe(monto);
+  const cobrado = orden.status === 'COMPLETED' && cobro.status === 'COMPLETED' && !!prod;
   if (!cobrado) return 'no_cobrado';
 
   let acceso = { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };
-  if (props.getProperty('PLATAFORMA_URL') && props.getProperty('PLATAFORMA_SECRETO')) {
-    const alta = altaPlataforma(email, pedido, monto, props);
+  if (prod.registro) {               // Kit: enlace de registro a su curso
+    const enlace = props.getProperty(prod.registro);
+    if (!enlace) { avisarFallo(email, pedido, props); return 'sin_enlaces'; }
+    acceso = { enlace: enlace, modo: 'registro' };
+  } else if (props.getProperty('PLATAFORMA_URL') && props.getProperty('PLATAFORMA_SECRETO')) {
+    const alta = altaPlataforma(email, pedido, monto, props, prod.curso);
     if (!alta) {                     // no se marca como enviado: el reintento o reintentarAcceso() lo vuelve a intentar
       avisarFallo(email, pedido, props);
       return 'error_plataforma';
@@ -170,22 +180,22 @@ function enviarAcceso(email, pedido) {
     acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
   }
 
-  const html = armarCorreo(email, pedido, acceso);
+  const html = armarCorreo(email, pedido, acceso, prod);
   const pagador = ((orden.payer || {}).email_address || '').toLowerCase();
   const para = pagador && pagador !== email ? email + ',' + pagador : email;
-  MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a Profit AI System · Nivel 1', htmlBody: html,
-    body: 'Tu acceso a Profit AI System. ' + TEXTOS_ACCESO[acceso.modo].titulo + ' (tu equipo de agentes): ' + acceso.enlace + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
+  MailApp.sendEmail({ to: para, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a ' + prod.nombre + ' · ' + prod.nivel, htmlBody: html,
+    body: 'Tu acceso a ' + prod.nombre + '. ' + TEXTOS_ACCESO[acceso.modo].titulo + ' (' + prod.agentes + '): ' + acceso.enlace + ' · ¿Dudas? WhatsApp: ' + ACCESO.WHATSAPP });
   props.setProperty(clave, new Date().toISOString());
   return 'enviado';
 }
 
 // Da de alta al alumno en la plataforma. Devuelve { enlace, nuevo } o null si falló.
-function altaPlataforma(email, pedido, monto, props) {
+function altaPlataforma(email, pedido, monto, props, curso) {
   try {
     const r = UrlFetchApp.fetch(props.getProperty('PLATAFORMA_URL').replace(/\/$/, '') + '/api/alta', {
       method: 'post', contentType: 'application/json', muteHttpExceptions: true,
       headers: { Authorization: 'Bearer ' + props.getProperty('PLATAFORMA_SECRETO') },
-      payload: JSON.stringify({ correo: email, pedido: pedido, curso: NIVEL1.curso, monto: monto.value || '', moneda: monto.currency_code || '' }) });
+      payload: JSON.stringify({ correo: email, pedido: pedido, curso: curso, monto: monto.value || '', moneda: monto.currency_code || '' }) });
     const j = JSON.parse(r.getContentText() || '{}');
     if (r.getResponseCode() !== 200 || !j.ok || !j.enlace) { Logger.log('Alta falló (' + r.getResponseCode() + '): ' + (j.error || '')); return null; }
     return { enlace: j.enlace, nuevo: !!j.nuevo };
@@ -205,6 +215,22 @@ function avisarFallo(email, pedido, props) {
   props.setProperty(clave, new Date().toISOString());
 }
 
+/** Pase del Kit al sistema completo (US$400 por WhatsApp, dentro de 14 días desde la compra del Kit).
+ *  Después de comprobar la compra del Kit y cobrar la diferencia: pon el correo y la referencia del cobro y dale Ejecutar.
+ *  Lo da de alta en el curso del sistema completo y le manda el correo de bienvenida del Nivel 2. */
+function darAccesoNivel2() {
+  const email = 'correo@ejemplo.com';   // ← correo con el que compró el Kit
+  const pedido = 'PEDIDO';              // ← número de cobro de PayPal de los US$400
+  const props = PropertiesService.getScriptProperties();
+  const prod = PRODUCTOS['497.00'];
+  const alta = altaPlataforma(email.trim().toLowerCase(), pedido, { value: '400.00', currency_code: MONEDA }, props, prod.curso);
+  if (!alta) { Logger.log('ERROR: la plataforma no dio de alta. Revisa y vuelve a intentar.'); return; }
+  const acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
+  MailApp.sendEmail({ to: email, name: REMITENTE, replyTo: RESPONDER_A, subject: 'Tu acceso a ' + prod.nombre + ' · ' + prod.nivel,
+    htmlBody: armarCorreo(email, pedido, acceso, prod) });
+  Logger.log('OK: acceso al sistema completo enviado a ' + email);
+}
+
 /** Reintento manual después de un aviso [REVISAR]: pon el correo y el pedido y dale Ejecutar. */
 function reintentarAcceso() {
   const email = 'correo@ejemplo.com';   // ← correo del aviso
@@ -214,6 +240,7 @@ function reintentarAcceso() {
 
 /** Prueba sin PayPal: da de alta TU correo de prueba en la plataforma y te manda el correo de bienvenida.
  *  Cambia el correo de abajo por uno tuyo (nunca de un cliente) y dale Ejecutar. */
+const MONTO_PRUEBA = '497.00';   // ← '97.00' para probar el Kit (Nivel 1), '497.00' para el sistema completo (Nivel 2)
 function pruebaAlta() {
   const correo = 'TU_CORREO_DE_PRUEBA@gmail.com';   // ← pon aquí tu correo de prueba
   const props = PropertiesService.getScriptProperties();
@@ -221,10 +248,18 @@ function pruebaAlta() {
     Logger.log('FALTA: PLATAFORMA_URL o PLATAFORMA_SECRETO en Propiedades del script.'); return;
   }
   const pedido = 'PRUEBA-' + Date.now();
-  const alta = altaPlataforma(correo.trim().toLowerCase(), pedido, { value: '0.00', currency_code: 'USD' }, props);
+  const prod = PRODUCTOS[MONTO_PRUEBA];
+  if (prod.registro) {               // Kit: no hay alta, solo el correo con el enlace de registro
+    const enlace = props.getProperty(prod.registro);
+    if (!enlace) { Logger.log('FALTA: ' + prod.registro + ' en Propiedades del script.'); return; }
+    MailApp.sendEmail({ to: correo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a ' + prod.nombre + ' · ' + prod.nivel,
+      htmlBody: armarCorreo(correo, pedido, { enlace: enlace, modo: 'registro' }, prod) });
+    Logger.log('OK: correo de bienvenida del Kit enviado a ' + correo); return;
+  }
+  const alta = altaPlataforma(correo.trim().toLowerCase(), pedido, { value: '0.00', currency_code: 'USD' }, props, prod.curso);
   if (!alta) { Logger.log('ERROR: la plataforma no dio de alta. Revisa la clave y la dirección (el motivo está arriba).'); return; }
   const acceso = { enlace: alta.enlace, modo: alta.nuevo ? 'nuevo' : 'existente' };
-  MailApp.sendEmail({ to: correo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a Profit AI System · Nivel 1', htmlBody: armarCorreo(correo, pedido, acceso) });
+  MailApp.sendEmail({ to: correo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a ' + prod.nombre + ' · ' + prod.nivel, htmlBody: armarCorreo(correo, pedido, acceso, prod) });
   Logger.log('OK: cuenta ' + (alta.nuevo ? 'nueva' : 'que ya existía') + ' en la plataforma y correo de bienvenida enviado a ' + correo);
 }
 
@@ -256,10 +291,18 @@ function pruebaKit() {
   Logger.log('Correo del kit enviado a ' + yo);
 }
 
-function armarCorreo(email, pedido, acceso) {
+function armarCorreo(email, pedido, acceso, prod) {
   acceso = acceso || { enlace: ACCESO.LINK_CURSO, modo: 'kajabi' };
+  prod = prod || PRODUCTOS['497.00'];
   const t = TEXTOS_ACCESO[acceso.modo];
+  const extra = prod.extra ? '<p style="margin:20px 0 0;font-size:14px;line-height:1.6;color:#b3bfd2;"><b style="color:#ff9900;">' + prod.extra + '</b><br>'
+    + '<a href="' + CITA_URL + '" style="color:#ff9900;font-weight:800;">Agendar mi cita</a></p>' : '';
   return HtmlService.createHtmlOutputFromFile('Correo').getContent()
+    .replace(/{{NIVEL}}/g, prod.nivel.toUpperCase())
+    .replace(/{{PRODUCTO}}/g, prod.nombre)
+    .replace(/{{PRECIO}}/g, prod.precio)
+    .replace(/{{AGENTES}}/g, prod.agentes)
+    .replace(/{{EXTRA}}/g, extra)
     .replace(/{{CORREO}}/g, email)
     .replace(/{{PEDIDO}}/g, pedido)
     .replace(/{{ACCESO_TITULO}}/g, t.titulo)
@@ -294,8 +337,9 @@ function ordenPayPal(pedido, props) {
 /** Prueba del correo: en el editor elige "pruebaCorreo" y dale Ejecutar. Te llega a ti, sin pasar por PayPal. */
 function pruebaCorreo() {
   const yo = Session.getActiveUser().getEmail();
-  const html = armarCorreo(yo, 'PRUEBA-0000');
-  MailApp.sendEmail({ to: yo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a Profit AI System · Nivel 1', htmlBody: html });
+  const prod = PRODUCTOS[MONTO_PRUEBA];
+  const html = armarCorreo(yo, 'PRUEBA-0000', null, prod);
+  MailApp.sendEmail({ to: yo, name: REMITENTE, subject: '[PRUEBA] Tu acceso a ' + prod.nombre + ' · ' + prod.nivel, htmlBody: html });
   Logger.log('Correo de prueba enviado a ' + yo);
 }
 

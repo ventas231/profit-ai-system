@@ -7,18 +7,28 @@
   };
   var correo = function () { return ls.get("correo"); };
   var pagina = document.body.dataset.pagina || "";
-  // ---- Promocion del Nivel 1 (config.js, PROMO_N1): solo entre inicio y fin ----
+  // ---- Promocion con fechas (config.js, PROMO_N1): sin PROMO_N1 no hace nada. Si se vuelve a usar, el Apps Script también debe aceptar ese monto ----
   var P = C.PROMO_N1, ahoraMs = Date.now();
   var promo = !!(P && P.monto && ahoraMs >= Date.parse(P.inicio) && ahoraMs < Date.parse(P.fin));
   var precioLista = C.PRECIO_N1, precioListaN2 = C.PRECIO_N2;
   if (promo) { C.PRECIO_N1 = P.precio; C.N1_MONTO = P.monto; if (P.precio_n2) C.PRECIO_N2 = P.precio_n2; }   // paypal.js lee N1_MONTO despues de este archivo
-  var valorN1 = parseFloat(C.N1_MONTO) || 497;
+  // ---- Lo que se paga: pago.html?nivel=1 (Kit) o 2 (sistema completo, también sin nivel) ----
+  var nivelPago = (function () { try { return new URLSearchParams(location.search).get("nivel") === "1" ? "1" : "2"; } catch (e) { return "2"; } })();
+  var PAGOS = {
+    "1": { monto: C.N1_MONTO, precio: C.PRECIO_N1, producto: C.NOMBRE_N1 + " · Nivel 1" },
+    "2": { monto: C.N2_MONTO, precio: C.PRECIO_N2, producto: C.NOMBRE_N2 + " · Nivel 2" }
+  };
+  C.NIVEL_PAGO = nivelPago;
+  C.MONTO_PAGO = PAGOS[nivelPago].monto;   // paypal.js lo lee después de este archivo
+  C.PRODUCTO_PAGO = PAGOS[nivelPago].producto;
+  C.PRECIO_PAGO = PAGOS[nivelPago].precio;
+  var valorPago = parseFloat(C.MONTO_PAGO) || 0;
   // Meta Pixel: eventos de conversión (si el píxel cargó)
   // La copia de servidor la hace "API de conversiones con Meta" y Meta ya la deduplica (100% con identificador de evento).
   var meta = function (ev, datos, opciones) { try { if (window.fbq) fbq("track", ev, datos || {}, opciones || {}); } catch (e) {} };
   if (pagina === "sistema") meta("ViewContent", { content_name: "Niveles Profit AI System" });
-  if (pagina === "pago") meta("InitiateCheckout", { value: valorN1, currency: "USD", content_name: "Profit AI System Nivel 1" });
-  if (pagina === "gracias") { var ped = new URLSearchParams(location.search).get("pedido"); if (ped) meta("Purchase", { value: valorN1, currency: "USD", content_name: "Profit AI System Nivel 1" }, { eventID: ped }); }
+  if (pagina === "pago") meta("InitiateCheckout", { value: valorPago, currency: "USD", content_name: C.PRODUCTO_PAGO });
+  if (pagina === "gracias") { var ped = new URLSearchParams(location.search).get("pedido"); if (ped) meta("Purchase", { value: valorPago, currency: "USD", content_name: C.PRODUCTO_PAGO }, { eventID: ped }); }
 
   // Lead una sola vez por correo en este navegador (corrección 2026-11-09, pendiente #135):
   // si la persona vuelve a meter el mismo correo, la hoja no crea fila nueva y Meta tampoco debe contar otro Lead.
@@ -61,6 +71,8 @@
   } catch (e) {}
 
   // ---- Textos y enlaces desde config.js ----
+  // pago.html y gracias.html: muestra solo los bloques del nivel que se está pagando
+  $$("[data-nivel]").forEach(function (el) { el.hidden = el.dataset.nivel.split(" ").indexOf(nivelPago) < 0; });
   $$("[data-cfg]").forEach(function (el) { var v = C[el.dataset.cfg]; if (v) el.textContent = v; });
   if (promo) {
     var cuentas = [];

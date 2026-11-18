@@ -398,3 +398,10 @@ body[data-pagina="inicio"] .btn-glow:hover::after{background-position:-50% 0}
 
 /* Niveles: frase del equipo arriba de la lista de agentes */
 .incluye .equipo{margin-top:10px;font:700 14px var(--f-body);color:var(--orange-soft)}
+
+/* Bloques que se esconden con el atributo hidden (p. ej. los de cada nivel en pago y gracias) */
+[hidden]{display:none!important}
+
+/* Nivel 2: opción de pagar solo la diferencia si ya compró el Kit */
+.pack .subida{display:grid;gap:10px;padding:14px;border:1px dashed rgba(255,153,0,.45);border-radius:14px;font-size:14px;line-height:1.5;color:var(--muted)}
+.pack .subida b{color:var(--fg)}

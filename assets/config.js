@@ -20,8 +20,17 @@ window.CONFIG = {
 
   // ---- Precios ----
   // Todo en dólares (USD).
-  PRECIO_N1: "US$497",
-  PRECIO_N2: "US$2,424",
+  // Nivel 1 · Kit de Utilidad (PPC + Inventario) y Nivel 2 · sistema completo: se pagan con PayPal.
+  // Nivel 3 · por cotización (videollamada o WhatsApp), sin precio en la página.
+  PRECIO_N1: "US$97",
+  PRECIO_N2: "US$497",
+  NOMBRE_N1: "Kit de Utilidad: PPC + Inventario",
+  NOMBRE_N2: "Profit AI System completo",
+  // Nivel 3 · Lo hacemos juntos (90 días con Gerardo): se agenda por videollamada o WhatsApp, no se paga en la página.
+  PRECIO_N3: "US$2,424",
+  // Pase del Kit al sistema completo pagando solo la diferencia (US$400), dentro de 14 días desde la compra del Kit.
+  // NO se paga en la página: va a WhatsApp con este mensaje; el equipo comprueba la compra y la fecha, cobra y da el acceso.
+  WHATSAPP_SUBIDA_URL: "https://wa.me/522223288421?text=" + encodeURIComponent("Hola, ya compré el Kit de Utilidad y quiero pasar al sistema completo pagando la diferencia de US$400."),
 
   // ---- Hoja de Google donde se registran los correos y las palomitas ----
   // URL de la "aplicación web" de Apps Script instalada en la hoja (ver README).
@@ -34,15 +43,9 @@ window.CONFIG = {
   PAYPAL_CLIENT_ID: "BAA9lOD5qeDAuse47KusE6tyqw4q4-As1rUP5fLwLzCzZ7ja51HT-lnsJcvrhS5XgvVJaq6xjbhj9tcnTY",            // Client ID (sandbox para pruebas, live para cobrar)
   PAYPAL_HOSTED_BUTTON_ID: "",     // Vacío: botón normal, con número de pedido para el correo automático
   PAYPAL_MODO: "live",             // "sandbox" o "live" (live solo con precio aprobado)
-  N1_MONTO: "497.00",              // usado solo si no hay botón alojado
+  N1_MONTO: "97.00",               // Nivel 1 · Kit de Utilidad. El Apps Script (Registro.gs, PRODUCTOS) debe tener los mismos montos
+  N2_MONTO: "497.00",              // Nivel 2 · sistema completo
   MONEDA: "USD",
-  // ---- Promocion con fechas: se prende y se apaga sola (hora del centro de Mexico, UTC-6) ----
-  // El Apps Script (Registro.gs, PROMO_N1) debe tener el MISMO monto y fechas: es quien confirma el cobro y manda el acceso.
-  PROMO_N1: { nombre: "Buen Fin adelantado", descuento: "25%", precio: "US$372.75", monto: "372.75", precio_n2: "US$1,818",   // Nivel 2: se cobra por WhatsApp, no por PayPal
-             
-              inicio: "2026-11-11T00:00:00-06:00", fin: "2026-11-17T00:00:00-06:00",   // fin = primer momento SIN descuento
-              cierre: "Termina el lunes 16 de noviembre",
-              logo: "assets/buen-fin.png" },   // imagen del sticker (ej. "assets/buen-fin.png"); vacío = sticker de texto
 
   // ---- Videos: enlace para insertar (YouTube no listado o Vimeo) ----
   VIDEO_PORTADA_URL: "assets/video/profit-ai-system-30s.mp4",   // video propio (.mp4); YouTube/Vimeo también funcionan       // Video 1 · Así se ve Profit AI System en 30 segundos (página principal)
