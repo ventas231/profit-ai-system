@@ -54,10 +54,10 @@ const PRODUCTOS = {
   // El Kit se entrega con el enlace de registro de su curso en la plataforma. El enlace lleva una clave:
   // va en Propiedades del script como KIT_REGISTRO_URL, nunca aquí (este archivo es público en GitHub).
   '97.00': { nivel: 'Nivel 1', nombre: 'Kit de Utilidad: PPC + Inventario', precio: 'US$97', registro: 'KIT_REGISTRO_URL',
-    agentes: 'Gestor de PPC · Planeador de Inventario',
+    agentes: 'El de Merca (PPC) · El del Almacén (Inventario)',
     extra: '' },
   '497.00': { nivel: 'Nivel 2', nombre: 'Profit AI System completo', precio: 'US$497', curso: 'profit-ai-system',
-    agentes: 'Analista de Rentabilidad · Gestor de PPC · Asesor de Nuevas Ventas · Estratega de Campañas · Redactor de Listings · Fotógrafo y Diseñador de A+ · Planeador de Inventario',
+    agentes: 'Diagnóstico de Rentabilidad · El de Merca · El de Nuevos Clientes · El Estratega · El de Contenido · La de Diseño · El del Almacén',
     extra: '' },
 };
 const CITA_URL = 'https://calendly.com/cursos-summaproducts/profit-ai-system';
