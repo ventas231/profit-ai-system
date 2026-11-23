@@ -52,6 +52,7 @@ window.CONFIG = {
   VIDEO_DIAGNOSTICO_URL: "",   // Video 2 · Cómo correr tu diagnóstico
   VIDEO_PRIORIDADES_URL: "",   // Video 3 · De tus prioridades a los cambios
   VIDEO_N1_URL: "https://www.youtube.com/embed/DTkH5pEVIf0?rel=0&autoplay=0",   // Video del Nivel 1 · Kit de Utilidad (YouTube no listado). Sin autoplay.
+  VIDEO_N2_URL: "https://www.youtube.com/embed/sD6NUt7AhkA?rel=0&autoplay=0",   // Video del Nivel 2 · Sistema completo (YouTube no listado). Sin autoplay.
 
   // ---- Descargas del diagnóstico ----
   // Un solo .zip con la skill del diagnóstico y la guía de reportes en PDF.
